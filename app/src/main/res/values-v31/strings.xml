@@ -9,4 +9,5 @@
     <string name="selectTime">Select Time</string>
     <string name="note">Note</string>
     <string name="examplehint">Description of this schedule</string>
+    <string name="appList">App List</string>
 </resources>
