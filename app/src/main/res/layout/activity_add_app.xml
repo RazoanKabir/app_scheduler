@@ -96,13 +96,15 @@
                     android:layout_marginStart="@dimen/_5sdp"
                     android:backgroundTint="@color/soft_blue"
                     android:layout_centerVertical="true">
+
                     <ImageView
                         android:id="@+id/ivAppListIcon"
                         android:layout_width="@dimen/_30sdp"
                         android:layout_height="@dimen/_30sdp"
                         android:layout_marginStart="@dimen/_5sdp"
+                        android:contentDescription="@string/addApp"
                         app:srcCompat="@drawable/ic_app_list_add_24"
-                        android:contentDescription="@string/addApp" />
+                        tools:ignore="ImageContrastCheck" />
 
                 </androidx.cardview.widget.CardView>
 
@@ -187,11 +189,10 @@
                     android:layout_width="@dimen/_30sdp"
                     android:layout_height="@dimen/_30sdp"
                     android:layout_centerVertical="true"
-                    android:layout_marginTop="@dimen/_16sdp"
-                    android:layout_marginEnd="@dimen/_24sdp"
                     android:layout_marginStart="@dimen/_5sdp"
-                    app:srcCompat="@drawable/ic_baseline_alarm_off_24"
-                    android:contentDescription="@string/addApp" />
+                    android:layout_marginTop="@dimen/_16sdp"
+                    android:contentDescription="@string/addApp"
+                    app:srcCompat="@drawable/ic_baseline_alarm_off_24" />
 
                 <LinearLayout
                     android:layout_width="wrap_content"
@@ -201,30 +202,7 @@
                     android:layout_toEndOf="@+id/ivScheduleIconStatus">
 
                     <LinearLayout
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:orientation="horizontal"
-                        android:padding="@dimen/_16sdp">
-
-                        <ImageView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            app:srcCompat="@drawable/ic_time_24"
-                            android:contentDescription="@string/addApp" />
-
-                        <TextView
-                            android:id="@+id/tvTime"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:text="@string/selectDate"
-                            android:layout_gravity="center"
-                            android:layout_marginStart="@dimen/_8sdp"
-                            android:textColor="@color/text_color_inner"
-                            android:textSize="@dimen/_12sdp" />
-
-                    </LinearLayout>
-
-                    <LinearLayout
+                        android:id="@+id/llSelectDate"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:orientation="horizontal"
@@ -238,6 +216,31 @@
 
                         <TextView
                             android:id="@+id/tvDate"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="@string/selectDate"
+                            android:layout_gravity="center"
+                            android:layout_marginStart="@dimen/_8sdp"
+                            android:textColor="@color/text_color_inner"
+                            android:textSize="@dimen/_12sdp" />
+
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:id="@+id/llSelectTime"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal"
+                        android:padding="@dimen/_16sdp">
+
+                        <ImageView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            app:srcCompat="@drawable/ic_time_24"
+                            android:contentDescription="@string/addApp" />
+
+                        <TextView
+                            android:id="@+id/tvTime"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:text="@string/selectTime"
@@ -265,12 +268,12 @@
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
                 android:backgroundTint="@color/bg_tint"
-                android:hint="@string/examplehint"
+                android:hint="@string/exampleHint"
                 android:inputType="text"
                 android:textColor="@color/black_700"
                 android:textColorHint="@color/bg_tint"
-                android:textSize="@dimen/_14sdp"
-                android:autofillHints="" />
+                android:textSize="@dimen/_16sdp"
+                android:autofillHints="@string/exampleHint" />
 
         </LinearLayout>
 
@@ -296,7 +299,7 @@
             android:text="@string/scheduleApp"
             android:textColor="@android:color/white"
             android:textSize="@dimen/_14sdp"
-            />
+            tools:ignore="TextContrastCheck" />
 
     </RelativeLayout>
 

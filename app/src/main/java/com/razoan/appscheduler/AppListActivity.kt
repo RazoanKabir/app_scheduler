@@ -12,12 +12,12 @@ import com.razoan.appscheduler.util.UtilClass
 import kotlinx.android.synthetic.main.activity_app_list.*
 import java.util.*
 
-
 class AppListActivity : AppCompatActivity(), AppListAdapter.SelectedApp {
     private var appListAdapter: AppListAdapter? = null
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_app_list)
+
         val apps: ArrayList<PackageAppInfo> = getPackages()
         if(apps.size > 0) {
             rvAppList?.layoutManager = LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false)
