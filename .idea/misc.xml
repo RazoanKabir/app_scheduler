@@ -6,8 +6,11 @@
         <entry key="..\:/AppScheduler/app/src/main/res/layout/activity_main.xml" value="0.35260416666666666" />
         <entry key="..\:/AppScheduler/app/src/main/res/layout/activity_splash.xml" value="0.36666666666666664" />
         <entry key="..\:/app_scheduler/app/src/main/res/drawable/footer.xml" value="0.3828125" />
+        <entry key="..\:/app_scheduler/app/src/main/res/drawable/line_divider.xml" value="0.3828125" />
         <entry key="..\:/app_scheduler/app/src/main/res/layout/activity_add_app.xml" value="0.33" />
+        <entry key="..\:/app_scheduler/app/src/main/res/layout/activity_app_list.xml" value="0.36666666666666664" />
         <entry key="..\:/app_scheduler/app/src/main/res/layout/activity_main.xml" value="0.36666666666666664" />
+        <entry key="..\:/app_scheduler/app/src/main/res/layout/item_app_list.xml" value="0.36666666666666664" />
       </map>
     </option>
   </component>
