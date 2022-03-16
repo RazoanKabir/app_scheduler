@@ -1,23 +1,19 @@
 package com.razoan.appscheduler
 
 import android.annotation.SuppressLint
+import android.content.pm.PackageManager
 import android.os.Bundle
-import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.razoan.appscheduler.adapter.AppListAdapter
 import com.razoan.appscheduler.model.PackageAppInfo
+import com.razoan.appscheduler.util.Constants
+import com.razoan.appscheduler.util.UtilClass
 import kotlinx.android.synthetic.main.activity_app_list.*
 import java.util.*
-import android.content.pm.ApplicationInfo
-import android.util.Log
-import android.content.pm.PackageManager
 
 
-
-
-
-class AppListActivity : AppCompatActivity() {
+class AppListActivity : AppCompatActivity(), AppListAdapter.SelectedApp {
     private var appListAdapter: AppListAdapter? = null
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -27,10 +23,8 @@ class AppListActivity : AppCompatActivity() {
             rvAppList?.layoutManager = LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false)
             rvAppList?.setHasFixedSize(true)
             rvAppList?.isNestedScrollingEnabled = false
-            appListAdapter = AppListAdapter(apps)
+            appListAdapter = AppListAdapter(apps, this)
             rvAppList?.adapter = appListAdapter
-            for(i in 0 until apps.size)
-            println("APPNAME: ${apps[i].appName}")
         }
     }
 
@@ -51,7 +45,6 @@ class AppListActivity : AppCompatActivity() {
         val packages = pm.getInstalledApplications(PackageManager.GET_META_DATA)
         for (packageInfo in packages) {
             if (pm.getLaunchIntentForPackage(packageInfo.packageName) != null) {
-                val currAppName = pm.getApplicationLabel(packageInfo).toString()
                 val newInfo = PackageAppInfo()
                 newInfo.appName = pm.getApplicationLabel(packageInfo).toString()
                 newInfo.packageName = packageInfo.packageName
@@ -60,5 +53,12 @@ class AppListActivity : AppCompatActivity() {
             }
         }
         return list
+    }
+
+    override fun appSelected(selectedApp: PackageAppInfo) {
+        val bundle = Bundle()
+        bundle.putString(Constants.appName, selectedApp.appName)
+        bundle.putString(Constants.appPackageName, selectedApp.packageName)
+        UtilClass.goToPreviousActivityWithBundle(this, bundle, AddAppActivity::class.java)
     }
 }
