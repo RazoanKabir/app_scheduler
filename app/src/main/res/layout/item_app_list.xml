@@ -11,7 +11,7 @@
         android:id="@+id/cvAppIcon"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        app:cardCornerRadius="@dimen/_8sdp"
+        app:cardCornerRadius="@dimen/_5sdp"
         android:layout_marginTop="@dimen/_14sdp"
         android:layout_marginEnd="@dimen/_16sdp"
         android:elevation="@dimen/_10sdp"

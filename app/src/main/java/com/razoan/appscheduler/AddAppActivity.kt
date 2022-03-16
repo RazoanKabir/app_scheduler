@@ -47,5 +47,9 @@ class AddAppActivity : AppCompatActivity() {
         rlGoToAppList.setOnClickListener {
             UtilClass.goToNextActivity(this, AppListActivity::class.java)
         }
+
+        rlSelectApp.setOnClickListener {
+            UtilClass.goToNextActivity(this, AppListActivity::class.java)
+        }
     }
 }
