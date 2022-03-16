@@ -1,8 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="app_name">App Scheduler</string>
     <string name="appSchedulerTitle">App Scheduler</string>
-    <string name="emptyListHome">No app added. Create a new one by clicking the add button at the top.</string>
-    <string name="addApp">Add app for scheduling</string>
     <string name="scheduleApp">Schedule App</string>
     <string name="selectApp">Select App</string>
     <string name="goToAppList">Go To App List</string>
