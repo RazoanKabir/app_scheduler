@@ -2,25 +2,18 @@ package com.razoan.appscheduler
 
 import android.annotation.SuppressLint
 import android.app.DatePickerDialog
+import android.app.TimePickerDialog
+import android.content.pm.PackageManager
 import android.graphics.drawable.Drawable
 import android.os.Bundle
 import android.view.View
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.content.res.ResourcesCompat
 import com.razoan.appscheduler.util.Constants
 import com.razoan.appscheduler.util.UtilClass
 import kotlinx.android.synthetic.main.activity_add_app.*
-import android.content.pm.PackageManager
-import android.widget.TimePicker
-
-import android.app.TimePickerDialog
-import android.app.TimePickerDialog.OnTimeSetListener
-import android.graphics.Color
-import java.util.*
-import android.graphics.drawable.ColorDrawable
-import android.widget.DatePicker
-import androidx.core.content.res.ResourcesCompat
 import java.text.SimpleDateFormat
-
+import java.util.*
 
 class AddAppActivity : AppCompatActivity() {
     private var appName: String? = null
@@ -62,19 +55,16 @@ class AddAppActivity : AppCompatActivity() {
         }
         tvAppName.text = appName
         tvPackageName.text = appPackageName
-        ivScheduleIconStatus.setImageDrawable(ResourcesCompat.getDrawable(resources, R.drawable.ic_baseline_alarm_on_24, null))
+        ivScheduleIconStatus.setImageDrawable(
+            ResourcesCompat.getDrawable(
+                resources,
+                R.drawable.ic_baseline_alarm_on_24,
+                null
+            )
+        )
         rlSelectApp.visibility = View.VISIBLE
 
     }
-
-    private fun checkIfAlarmCanActive() {
-
-    }
-
-    private fun dateSelect() {
-
-    }
-
     @SuppressLint("SimpleDateFormat")
     private fun initListener() {
         val timeSetListener = TimePickerDialog.OnTimeSetListener { _, hour, minute ->
@@ -83,7 +73,13 @@ class AddAppActivity : AppCompatActivity() {
             tvTime.text = SimpleDateFormat("hh:mm aa").format(cal.time)
         }
         llSelectTime.setOnClickListener {
-            TimePickerDialog(this, timeSetListener, cal.get(Calendar.HOUR_OF_DAY), cal.get(Calendar.MINUTE), false).show()
+            TimePickerDialog(
+                this,
+                timeSetListener,
+                cal.get(Calendar.HOUR_OF_DAY),
+                cal.get(Calendar.MINUTE),
+                false
+            ).show()
         }
 
         val dateSetListener =
@@ -98,11 +94,13 @@ class AddAppActivity : AppCompatActivity() {
 
         llSelectDate.setOnClickListener {
             cal = Calendar.getInstance()
-            val datePicker = DatePickerDialog(this@AddAppActivity,
+            val datePicker = DatePickerDialog(
+                this@AddAppActivity,
                 dateSetListener,
                 cal.get(Calendar.YEAR),
                 cal.get(Calendar.MONTH),
-                cal.get(Calendar.DAY_OF_MONTH))
+                cal.get(Calendar.DAY_OF_MONTH)
+            )
             datePicker.datePicker.minDate = cal.timeInMillis
             datePicker.show()
         }

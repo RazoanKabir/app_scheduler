@@ -12,20 +12,25 @@ import androidx.recyclerview.widget.RecyclerView
 import com.razoan.appscheduler.R
 import com.razoan.appscheduler.model.PackageAppInfo
 
-class AppListAdapter(var apps: ArrayList<PackageAppInfo>, private val selectedApp: SelectedApp): RecyclerView.Adapter<AppListAdapter.ParentViewHolder>() {
+class AppListAdapter(var apps: ArrayList<PackageAppInfo>, private val selectedApp: SelectedApp) :
+    RecyclerView.Adapter<AppListAdapter.ParentViewHolder>() {
 
     private lateinit var context: Context
     var activity: Activity? = null
 
     interface SelectedApp {
-        fun appSelected (selectedApp: PackageAppInfo)
+        fun appSelected(selectedApp: PackageAppInfo)
     }
 
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): AppListAdapter.ParentViewHolder {
+    override fun onCreateViewHolder(
+        parent: ViewGroup,
+        viewType: Int
+    ): AppListAdapter.ParentViewHolder {
         context = parent.context
-        activity= parent.context as Activity?
+        activity = parent.context as Activity?
 
-        val view = LayoutInflater.from(parent.context).inflate(R.layout.item_app_list, parent, false)
+        val view =
+            LayoutInflater.from(parent.context).inflate(R.layout.item_app_list, parent, false)
         return AppListAdapter.ParentViewHolder(view)
     }
 
@@ -43,7 +48,7 @@ class AppListAdapter(var apps: ArrayList<PackageAppInfo>, private val selectedAp
         }
     }
 
-    class ParentViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView){
+    class ParentViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         val ivIcon: ImageView? = itemView.findViewById<ImageView>(R.id.ivSelectedAppIcon)
         val tvNameOfApp: TextView? = itemView.findViewById<TextView>(R.id.tvNameOfApp)
         val tvPackageNameOfApp: TextView? = itemView.findViewById<TextView>(R.id.tvPackageNameOfApp)
