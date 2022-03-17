@@ -31,6 +31,15 @@
             android:screenOrientation="portrait"
             android:windowSoftInputMode="stateAlwaysHidden"/>
 
+        <receiver android:enabled="true" android:name=".util.OpenAppReceiver"
+            android:exported="true"
+            android:process=":remote">
+            <intent-filter>
+                <action android:name="android.intent.action.ACTION_AIRPLANE_MODE_CHANGED"/>
+                <data android:scheme="timer:" />
+            </intent-filter>
+        </receiver>
+
     </application>
 
     <queries>
@@ -38,5 +47,7 @@
             <action android:name="android.intent.action.MAIN" />
         </intent>
     </queries>
+
+
 
 </manifest>

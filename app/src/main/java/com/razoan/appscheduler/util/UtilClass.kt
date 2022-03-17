@@ -4,6 +4,7 @@ import android.app.Activity
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
+import android.widget.Toast
 
 class UtilClass {
     companion object {
@@ -24,6 +25,10 @@ class UtilClass {
             intent.flags = Intent.FLAG_ACTIVITY_CLEAR_TOP
             intent.putExtras(bundle!!)
             context.startActivity(intent)
+        }
+
+        fun showToast(context: Context?, msg: String?) {
+            Toast.makeText(context, msg, Toast.LENGTH_LONG).show()
         }
     }
 }

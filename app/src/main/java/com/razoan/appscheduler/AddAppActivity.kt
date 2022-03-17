@@ -1,8 +1,12 @@
 package com.razoan.appscheduler
 
 import android.annotation.SuppressLint
+import android.app.AlarmManager
 import android.app.DatePickerDialog
+import android.app.PendingIntent
 import android.app.TimePickerDialog
+import android.content.Context
+import android.content.Intent
 import android.content.pm.PackageManager
 import android.graphics.drawable.Drawable
 import android.os.Bundle
@@ -10,16 +14,23 @@ import android.view.View
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.res.ResourcesCompat
 import com.razoan.appscheduler.util.Constants
+import com.razoan.appscheduler.util.OpenAppReceiver
 import com.razoan.appscheduler.util.UtilClass
 import kotlinx.android.synthetic.main.activity_add_app.*
 import java.text.SimpleDateFormat
 import java.util.*
+
 
 class AddAppActivity : AppCompatActivity() {
     private var appName: String? = null
     private var appPackageName: String? = null
     private var appIcon: Drawable? = null
     private var cal = Calendar.getInstance()
+    private var minSelected: Int? = 0
+    private var hourSelected: Int? = 0
+    private var daySelected: Int? = 0
+    private var monthSelected: Int? = 0
+    private var yearSelected: Int? = 0
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_add_app)
@@ -63,14 +74,17 @@ class AddAppActivity : AppCompatActivity() {
             )
         )
         rlSelectApp.visibility = View.VISIBLE
-
     }
+
     @SuppressLint("SimpleDateFormat")
     private fun initListener() {
         val timeSetListener = TimePickerDialog.OnTimeSetListener { _, hour, minute ->
             cal.set(Calendar.HOUR_OF_DAY, hour)
             cal.set(Calendar.MINUTE, minute)
             tvTime.text = SimpleDateFormat("hh:mm aa").format(cal.time)
+            hourSelected = hour
+            minSelected = minute
+
         }
         llSelectTime.setOnClickListener {
             TimePickerDialog(
@@ -90,6 +104,9 @@ class AddAppActivity : AppCompatActivity() {
                 val myFormat = "dd/MM/yyyy"
                 val sdf = SimpleDateFormat(myFormat, Locale.getDefault())
                 tvDate.text = sdf.format(cal.time)
+                yearSelected = year
+                monthSelected = monthOfYear
+                daySelected = dayOfMonth
             }
 
         llSelectDate.setOnClickListener {
@@ -111,6 +128,35 @@ class AddAppActivity : AppCompatActivity() {
 
         rlSelectApp.setOnClickListener {
             UtilClass.goToNextActivity(this, AppListActivity::class.java)
+        }
+
+        btnScheduleApp.setOnClickListener {
+            val alarmMgr = getSystemService(Context.ALARM_SERVICE) as AlarmManager
+            val alarmIntent = Intent(this, OpenAppReceiver::class.java).let { intent ->
+                intent.putExtra(Constants.appPackageName, tvPackageName.text)
+                PendingIntent.getBroadcast(this, 0, intent, 0)
+            }
+            val calendar: Calendar = Calendar.getInstance().apply {
+                timeInMillis = System.currentTimeMillis()
+                set(Calendar.YEAR, yearSelected!!)
+                set(Calendar.MONTH, monthSelected!!)
+                set(Calendar.DAY_OF_MONTH, daySelected!!)
+                set(Calendar.HOUR_OF_DAY, hourSelected!!)
+                set(Calendar.MINUTE, minSelected!!)
+                set(Calendar.SECOND, 0)
+            }
+
+            alarmMgr.set(
+                AlarmManager.RTC_WAKEUP,
+                calendar.timeInMillis,
+                alarmIntent
+            )
+            /*alarmMgr.setRepeating(
+                AlarmManager.RTC_WAKEUP,
+                calendar.timeInMillis,
+                1000 * 60 * 60 * 24,
+                alarmIntent
+            )*/
         }
     }
 }
