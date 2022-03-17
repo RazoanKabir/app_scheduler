@@ -20,7 +20,6 @@ import kotlinx.android.synthetic.main.activity_add_app.*
 import java.text.SimpleDateFormat
 import java.util.*
 
-
 class AddAppActivity : AppCompatActivity() {
     private var appName: String? = null
     private var appPackageName: String? = null
@@ -44,6 +43,11 @@ class AddAppActivity : AppCompatActivity() {
         val df = SimpleDateFormat("dd/MM/yyyy", Locale.getDefault())
         tvDate.text = df.format(cal.time)
         tvTime.text = SimpleDateFormat("hh:mm aa").format(cal.time)
+        yearSelected = cal.get(Calendar.YEAR)
+        monthSelected = cal.get(Calendar.MONTH)
+        daySelected = cal.get(Calendar.DAY_OF_MONTH)
+        hourSelected = cal.get(Calendar.HOUR_OF_DAY)
+        minSelected = cal.get(Calendar.MINUTE)
     }
 
     private fun checkIntent() {
@@ -84,7 +88,6 @@ class AddAppActivity : AppCompatActivity() {
             tvTime.text = SimpleDateFormat("hh:mm aa").format(cal.time)
             hourSelected = hour
             minSelected = minute
-
         }
         llSelectTime.setOnClickListener {
             TimePickerDialog(
