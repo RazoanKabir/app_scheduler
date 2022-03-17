@@ -1,23 +1,18 @@
 package com.razoan.appscheduler
 
 import android.annotation.SuppressLint
-import android.app.AlarmManager
 import android.app.DatePickerDialog
-import android.app.PendingIntent
 import android.app.TimePickerDialog
-import android.content.Context
-import android.content.Intent
 import android.content.pm.PackageManager
 import android.graphics.drawable.Drawable
 import android.os.Bundle
-import android.util.Log
 import android.view.View
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.res.ResourcesCompat
+import com.google.gson.Gson
 import com.razoan.appscheduler.handler.DatabaseHandler
 import com.razoan.appscheduler.model.AppSelectionModel
 import com.razoan.appscheduler.util.Constants
-import com.razoan.appscheduler.util.OpenAppReceiver
 import com.razoan.appscheduler.util.UtilClass
 import kotlinx.android.synthetic.main.activity_add_app.*
 import java.text.SimpleDateFormat
@@ -33,11 +28,12 @@ class AddAppActivity : AppCompatActivity() {
     private var daySelected: Int? = 0
     private var monthSelected: Int? = 0
     private var yearSelected: Int? = 0
+    private var app: AppSelectionModel? = null
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_add_app)
-        checkIntent()
         setDateValues()
+        checkIntent()
         initListener()
     }
 
@@ -58,12 +54,16 @@ class AddAppActivity : AppCompatActivity() {
             if (intent.getStringExtra(Constants.appName) != null && intent.getStringExtra(Constants.appPackageName) != null) {
                 appName = intent.getStringExtra(Constants.appName)
                 appPackageName = intent.getStringExtra(Constants.appPackageName)
-                setAppInfo(appName, appPackageName)
+                setAppInfoFromSelection(appName, appPackageName)
+            }
+            if(intent.getStringExtra(Constants.appToJSON) != null) {
+                app = Gson().fromJson<AppSelectionModel>(intent?.getStringExtra(Constants.appToJSON), AppSelectionModel::class.java)
+                setAppInfoForEdit(app)
             }
         }
     }
 
-    private fun setAppInfo(appName: String?, appPackageName: String?) {
+    private fun setAppInfoFromSelection(appName: String?, appPackageName: String?) {
         rlGoToAppList.visibility = View.GONE
         try {
             appIcon = this.packageManager.getApplicationIcon(appPackageName.toString())
@@ -81,6 +81,22 @@ class AddAppActivity : AppCompatActivity() {
             )
         )
         rlSelectApp.visibility = View.VISIBLE
+    }
+
+    @SuppressLint("SimpleDateFormat", "SetTextI18n")
+    private fun setAppInfoForEdit(app: AppSelectionModel?) {
+        setAppInfoFromSelection(app?.appName, app?.appPackageName)
+        val aa = if (app?.hour?.toInt()!! > 11)  ("pm") else ("am")
+        val hour = if (app.hour.toInt() > 12)  (app.hour.toInt()-12) else (app.hour)
+        etNote.setText(app.note)
+        tvDate.text = "${app.day}/${app.month}/${app.year}"
+        tvTime.text = "${hour}:${app.minute} $aa"
+
+        yearSelected = app.year?.toInt()
+        monthSelected = app.month?.toInt()
+        daySelected = app.day?.toInt()
+        hourSelected = app.hour.toInt()
+        minSelected = app.minute?.toInt()
     }
 
     @SuppressLint("SimpleDateFormat")
@@ -137,30 +153,69 @@ class AddAppActivity : AppCompatActivity() {
         }
 
         btnScheduleApp.setOnClickListener {
-            val status = DatabaseHandler(this).addApp(
-                AppSelectionModel(
-                    0,
-                    tvAppName.text.toString(),
-                    tvPackageName.text.toString(),
-                    etNote.text.toString(),
-                    "${tvDate.text} ${tvTime.text}",
-                    yearSelected.toString(),
-                    monthSelected.toString(),
-                    daySelected.toString(),
-                    hourSelected.toString(),
-                    minSelected.toString(),
-                    "0",
-                    "0"
-                )
-            )
-
-            if (status > -1) {
-                UtilClass.showToast(this, getString(R.string.recordSaved))
-                DatabaseHandler(this).setLatestScheduledApp(this)
-                UtilClass.goToNextActivity(this, MainActivity::class.java)
-                finish()
-            } else
-                UtilClass.showToast(this, getString(R.string.canNotSavedRecord))
+           if(app != null) {
+              updateApp()
+           } else addApp()
         }
+    }
+
+    private fun updateApp() {
+        val status = DatabaseHandler(this).updateSchedule(
+            AppSelectionModel(
+                app?.id,
+                tvAppName.text.toString(),
+                tvPackageName.text.toString(),
+                etNote.text.toString(),
+                "${tvDate.text} ${tvTime.text}",
+                yearSelected.toString(),
+                monthSelected.toString(),
+                daySelected.toString(),
+                hourSelected.toString(),
+                minSelected.toString(),
+                "0",
+                "0"
+            )
+        )
+        updateStatus(status)
+    }
+
+    private fun addApp() {
+        val status = DatabaseHandler(this).addApp(
+            AppSelectionModel(
+                0,
+                tvAppName.text.toString(),
+                tvPackageName.text.toString(),
+                etNote.text.toString(),
+                "${tvDate.text} ${tvTime.text}",
+                yearSelected.toString(),
+                monthSelected.toString(),
+                daySelected.toString(),
+                hourSelected.toString(),
+                minSelected.toString(),
+                "0",
+                "0"
+            )
+        )
+        updateStatus(status)
+    }
+
+    private fun updateStatus(status: Long) {
+        if (status > -1) {
+            UtilClass.showToast(this, getString(R.string.recordSaved))
+            DatabaseHandler(this).setLatestScheduledApp(this)
+            UtilClass.goToNextActivity(this, MainActivity::class.java)
+            finish()
+        } else
+            UtilClass.showToast(this, getString(R.string.canNotSavedRecord))
+    }
+
+    private fun updateStatus(status: Int) {
+        if (status > -1) {
+            UtilClass.showToast(this, getString(R.string.recordUpdated))
+            DatabaseHandler(this).setLatestScheduledApp(this)
+            UtilClass.goToNextActivity(this, MainActivity::class.java)
+            finish()
+        } else
+            UtilClass.showToast(this, getString(R.string.canNotUpdateRecord))
     }
 }

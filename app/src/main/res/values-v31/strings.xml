@@ -12,4 +12,6 @@
     <string name="appList">App List</string>
     <string name="recordSaved">Record Saved</string>
     <string name="canNotSavedRecord">App can not be scheduled, please try again</string>
+    <string name="recordUpdated">Record updated</string>
+    <string name="canNotUpdateRecord">Can not be updated, please try again.</string>
 </resources>

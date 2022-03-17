@@ -2,15 +2,20 @@ package com.razoan.appscheduler.adapter
 
 import android.app.Activity
 import android.content.Context
+import android.content.Intent
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
+import android.widget.LinearLayout
 import android.widget.RelativeLayout
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
+import com.razoan.appscheduler.AddAppActivity
 import com.razoan.appscheduler.R
 import com.razoan.appscheduler.model.AppSelectionModel
+import com.razoan.appscheduler.util.Constants
+import kotlinx.serialization.json.Json
 
 class ScheduledAppListAdapter(var apps: ArrayList<AppSelectionModel>) : RecyclerView.Adapter<ScheduledAppListAdapter.ParentViewHolder>() {
 
@@ -34,19 +39,33 @@ class ScheduledAppListAdapter(var apps: ArrayList<AppSelectionModel>) : Recycler
         holder.tvNameOfApp?.text = apps[position].appName
         holder.tvPackageNameOfApp?.text = apps[position].appPackageName
         holder.tvPackageSelectionDate?.text = apps[position].dateTime
+        holder.tvPackageSelectionDate?.visibility = View.VISIBLE
         if(!apps[position].note.isNullOrEmpty()){
             holder.tvNote?.text = apps[position].note
             holder.tvNote?.visibility = View.VISIBLE
         }
-        holder.tvPackageSelectionDate?.visibility = View.VISIBLE
+        holder.llEditAndDelete?.visibility = View.VISIBLE
+
+        holder.ivEdit?.setOnClickListener {
+            val appToJson = Json.encodeToString(AppSelectionModel.serializer(), apps[position])
+            val intent = Intent(context, AddAppActivity::class.java)
+            intent.putExtra(Constants.appToJSON, appToJson)
+            context.startActivity(intent)
+        }
+
+        holder.ivDelete?.setOnClickListener {
+
+        }
     }
 
     class ParentViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         val ivIcon: ImageView? = itemView.findViewById<ImageView>(R.id.ivSelectedAppIcon)
+        val ivEdit: ImageView? = itemView.findViewById<ImageView>(R.id.ivEdit)
+        val ivDelete: ImageView? = itemView.findViewById<ImageView>(R.id.ivDelete)
         val tvNameOfApp: TextView? = itemView.findViewById<TextView>(R.id.tvNameOfApp)
         val tvPackageNameOfApp: TextView? = itemView.findViewById<TextView>(R.id.tvPackageNameOfApp)
         val tvPackageSelectionDate: TextView? = itemView.findViewById<TextView>(R.id.tvPackageSelectionDate)
         val tvNote: TextView? = itemView.findViewById<TextView>(R.id.tvNote)
-        val rlAppItem: RelativeLayout? = itemView.findViewById<RelativeLayout>(R.id.rlAppItem)
+        val llEditAndDelete: LinearLayout? = itemView.findViewById<LinearLayout>(R.id.llEditAndDelete)
     }
 }

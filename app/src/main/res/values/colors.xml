@@ -13,4 +13,5 @@
     <color name="text_color_inner">#1A1A1A</color>
     <color name="black_700">#2F3137</color>
     <color name="bg_tint">#868990</color>
+    <color name="base_color">#28A575</color>
 </resources>
