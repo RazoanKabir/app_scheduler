@@ -61,6 +61,23 @@
             android:background="@color/white"
             android:orientation="vertical">
 
+            <RelativeLayout
+                android:id="@+id/rlAppList"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/appBarLayout"
+                android:background="@color/white"
+                android:visibility="visible">
+
+                <androidx.recyclerview.widget.RecyclerView
+                    android:id="@+id/rvAppList"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:paddingStart="@dimen/_3sdp"
+                    tools:itemCount="5"
+                    tools:listitem="@layout/item_app_list" />
+            </RelativeLayout>
+
 
 
         </androidx.core.widget.NestedScrollView>
@@ -92,13 +109,5 @@
             android:padding="@dimen/_16sdp"/>
     </RelativeLayout>
 
-    <Button
-        android:id="@+id/btPermission"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_centerVertical="true"
-        android:layout_centerHorizontal="true"
-        android:text="permission"
-        android:visibility="visible"/>
 
 </RelativeLayout>

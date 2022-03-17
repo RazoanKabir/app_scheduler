@@ -13,6 +13,8 @@ import android.os.Bundle
 import android.view.View
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.res.ResourcesCompat
+import com.razoan.appscheduler.dbhandler.DatabaseHandler
+import com.razoan.appscheduler.model.AppSelectionModel
 import com.razoan.appscheduler.util.Constants
 import com.razoan.appscheduler.util.OpenAppReceiver
 import com.razoan.appscheduler.util.UtilClass
@@ -154,6 +156,29 @@ class AddAppActivity : AppCompatActivity() {
                 calendar.timeInMillis,
                 alarmIntent
             )
+            val status = DatabaseHandler(this).addApp(
+                AppSelectionModel(
+                    0,
+                    tvAppName.text.toString(),
+                    tvPackageName.text.toString(),
+                    "${tvDate.text} ${tvTime.text}",
+                    yearSelected.toString(),
+                    monthSelected.toString(),
+                    daySelected.toString(),
+                    hourSelected.toString(),
+                    minSelected.toString(),
+                    "0",
+                    "0"
+                )
+            )
+
+            if (status > -1) {
+                UtilClass.showToast(this, getString(R.string.recordSaved))
+                UtilClass.goToNextActivity(this, MainActivity::class.java)
+                finish()
+            } else
+                UtilClass.showToast(this, getString(R.string.canNotSavedRecord))
+
             /*alarmMgr.setRepeating(
                 AlarmManager.RTC_WAKEUP,
                 calendar.timeInMillis,

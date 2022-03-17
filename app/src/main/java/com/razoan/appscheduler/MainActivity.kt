@@ -5,11 +5,21 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.provider.Settings
 import android.provider.Settings.ACTION_APPLICATION_DETAILS_SETTINGS
+import android.view.View
 import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
+import androidx.recyclerview.widget.LinearLayoutManager
+import com.razoan.appscheduler.adapter.AppListAdapter
+import com.razoan.appscheduler.adapter.ScheduledAppListAdapter
+import com.razoan.appscheduler.dbhandler.DatabaseHandler
+import com.razoan.appscheduler.model.AppSelectionModel
 import com.razoan.appscheduler.util.UtilClass
+import kotlinx.android.synthetic.main.activity_app_list.*
 import kotlinx.android.synthetic.main.activity_main.*
+import kotlinx.android.synthetic.main.activity_main.rlAppList
+import kotlinx.android.synthetic.main.activity_main.rvAppList
 
 class MainActivity : AppCompatActivity() {
+    private var scheduledAppListAdapter: ScheduledAppListAdapter? = null
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         installSplashScreen()
@@ -25,26 +35,32 @@ class MainActivity : AppCompatActivity() {
 
     private fun checkOverlayPermission() {
         if (!Settings.canDrawOverlays(this)) {
-            /*Intent(ACTION_APPLICATION_DETAILS_SETTINGS, Uri.parse("package:$packageName")).apply {
-                addCategory(Intent.CATEGORY_DEFAULT)
-                addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
-                startActivity(this)
-            }*/
             Intent(Settings.ACTION_MANAGE_OVERLAY_PERMISSION, Uri.parse("package:$packageName")).apply {
                 addCategory(Intent.CATEGORY_DEFAULT)
                 addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
                 startActivity(this)
             }
         } else {
-            UtilClass.goToNextActivity(this, AddAppActivity:: class.java)
+            val selectedAppList: ArrayList<AppSelectionModel> = DatabaseHandler(this).viewScheduledApp()
+            if(selectedAppList.size > 0) {
+                rvAppList?.layoutManager = LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false)
+                rvAppList?.setHasFixedSize(true)
+                rvAppList?.isNestedScrollingEnabled = false
+                scheduledAppListAdapter = ScheduledAppListAdapter(selectedAppList)
+                rvAppList?.adapter = scheduledAppListAdapter
+                rlAppList.visibility = View.VISIBLE
+            } else {
+                rlAppList.visibility = View.GONE
+                rlEmptyView.visibility = View.VISIBLE
+
+            }
         }
     }
 
     private fun initListener() {
+        addApp.setOnClickListener {
+            UtilClass.goToNextActivity(this, AddAppActivity:: class.java)
+        }
 
-        /*btPermission.setOnClickListener {
-
-
-        }*/
     }
 }
