@@ -10,10 +10,11 @@ import android.content.Intent
 import android.content.pm.PackageManager
 import android.graphics.drawable.Drawable
 import android.os.Bundle
+import android.util.Log
 import android.view.View
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.res.ResourcesCompat
-import com.razoan.appscheduler.dbhandler.DatabaseHandler
+import com.razoan.appscheduler.handler.DatabaseHandler
 import com.razoan.appscheduler.model.AppSelectionModel
 import com.razoan.appscheduler.util.Constants
 import com.razoan.appscheduler.util.OpenAppReceiver
@@ -87,7 +88,7 @@ class AddAppActivity : AppCompatActivity() {
         val timeSetListener = TimePickerDialog.OnTimeSetListener { _, hour, minute ->
             cal.set(Calendar.HOUR_OF_DAY, hour)
             cal.set(Calendar.MINUTE, minute)
-            tvTime.text = SimpleDateFormat("hh:mm aa").format(cal.time)
+            tvTime.text = SimpleDateFormat("hh:mm:ss aa").format(cal.time)
             hourSelected = hour
             minSelected = minute
         }
@@ -136,26 +137,6 @@ class AddAppActivity : AppCompatActivity() {
         }
 
         btnScheduleApp.setOnClickListener {
-            val alarmMgr = getSystemService(Context.ALARM_SERVICE) as AlarmManager
-            val alarmIntent = Intent(this, OpenAppReceiver::class.java).let { intent ->
-                intent.putExtra(Constants.appPackageName, tvPackageName.text)
-                PendingIntent.getBroadcast(this, 0, intent, 0)
-            }
-            val calendar: Calendar = Calendar.getInstance().apply {
-                timeInMillis = System.currentTimeMillis()
-                set(Calendar.YEAR, yearSelected!!)
-                set(Calendar.MONTH, monthSelected!!)
-                set(Calendar.DAY_OF_MONTH, daySelected!!)
-                set(Calendar.HOUR_OF_DAY, hourSelected!!)
-                set(Calendar.MINUTE, minSelected!!)
-                set(Calendar.SECOND, 0)
-            }
-
-            alarmMgr.set(
-                AlarmManager.RTC_WAKEUP,
-                calendar.timeInMillis,
-                alarmIntent
-            )
             val status = DatabaseHandler(this).addApp(
                 AppSelectionModel(
                     0,
@@ -174,17 +155,11 @@ class AddAppActivity : AppCompatActivity() {
 
             if (status > -1) {
                 UtilClass.showToast(this, getString(R.string.recordSaved))
+                DatabaseHandler(this).setLatestScheduledApp(this)
                 UtilClass.goToNextActivity(this, MainActivity::class.java)
                 finish()
             } else
                 UtilClass.showToast(this, getString(R.string.canNotSavedRecord))
-
-            /*alarmMgr.setRepeating(
-                AlarmManager.RTC_WAKEUP,
-                calendar.timeInMillis,
-                1000 * 60 * 60 * 24,
-                alarmIntent
-            )*/
         }
     }
 }

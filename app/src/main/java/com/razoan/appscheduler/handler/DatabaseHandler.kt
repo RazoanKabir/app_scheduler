@@ -1,13 +1,21 @@
-package com.razoan.appscheduler.dbhandler
+package com.razoan.appscheduler.handler
 
 import android.annotation.SuppressLint
+import android.app.AlarmManager
+import android.app.PendingIntent
 import android.content.ContentValues
 import android.content.Context
+import android.content.Intent
 import android.database.Cursor
 import android.database.sqlite.SQLiteDatabase
 import android.database.sqlite.SQLiteException
 import android.database.sqlite.SQLiteOpenHelper
+import android.util.Log
 import com.razoan.appscheduler.model.AppSelectionModel
+import com.razoan.appscheduler.util.Constants
+import com.razoan.appscheduler.util.OpenAppReceiver
+import java.util.*
+import kotlin.collections.ArrayList
 
 class DatabaseHandler(context: Context) :
     SQLiteOpenHelper(context, DATABASE_NAME, null, DATABASE_VERSION) {
@@ -135,5 +143,120 @@ class DatabaseHandler(context: Context) :
             } while (cursor.moveToNext())
         }
         return selectedAppList
+    }
+
+    fun updateSchedule(app: AppSelectionModel): Int {
+        val db = this.writableDatabase
+        val contentValues = ContentValues()
+        contentValues.put(KEY_NAME, app.appName)
+        contentValues.put(KEY_PACKAGE_NAME, app.appPackageName)
+        contentValues.put(KEY_DATE_TIME, app.dateTime)
+        contentValues.put(KEY_YEAR, app.year)
+        contentValues.put(KEY_MONTH, app.month)
+        contentValues.put(KEY_DAY, app.day)
+        contentValues.put(KEY_HOUR, app.hour)
+        contentValues.put(KEY_MINUTE, app.minute)
+        contentValues.put(KEY_IS_REPEATABLE, app.isRepeatable)
+        contentValues.put(KEY_IS_EXECUTED, app.isExecuted)
+
+        val success = db.update(TABLE_SCHEDULER, contentValues, KEY_ID + "=" + app.id, null)
+        db.close()
+        return success
+    }
+
+    @SuppressLint("Range")
+    fun setLatestScheduledApp(context: Context) {
+
+        val latestAppToOpen = ArrayList<AppSelectionModel>()
+
+        // Query to select all the records from the table.
+        val selectQuery = "SELECT  * FROM $TABLE_SCHEDULER WHERE $KEY_IS_EXECUTED = '0' ORDER BY $KEY_DATE_TIME ASC LIMIT 1"
+
+        val db = this.readableDatabase
+        // Cursor is used to read the record one by one. Add them to data model class.
+        var cursor: Cursor? = null
+
+        try {
+            cursor = db.rawQuery(selectQuery, null)
+
+        } catch (e: SQLiteException) {
+            db.execSQL(selectQuery)
+        }
+
+        var id: Int
+        var appName: String
+        var appPackageName: String
+        var dateTime: String
+        var year: String
+        var month: String
+        var day: String
+        var hour: String
+        var minute: String
+        var isRepeatable: String
+        var isExecuted: String
+
+        if (cursor?.moveToFirst() == true) {
+            do {
+                id = cursor.getInt(cursor.getColumnIndex(KEY_ID))
+                appName = cursor.getString(cursor.getColumnIndex(KEY_NAME))
+                appPackageName = cursor.getString(cursor.getColumnIndex(KEY_PACKAGE_NAME))
+                dateTime = cursor.getString(cursor.getColumnIndex(KEY_DATE_TIME))
+                year = cursor.getString(cursor.getColumnIndex(KEY_YEAR))
+                month = cursor.getString(cursor.getColumnIndex(KEY_MONTH))
+                day = cursor.getString(cursor.getColumnIndex(KEY_DAY))
+                hour = cursor.getString(cursor.getColumnIndex(KEY_HOUR))
+                minute = cursor.getString(cursor.getColumnIndex(KEY_MINUTE))
+                isRepeatable = cursor.getString(cursor.getColumnIndex(KEY_IS_REPEATABLE))
+                isExecuted = cursor.getString(cursor.getColumnIndex(KEY_IS_EXECUTED))
+
+                val appSelected = AppSelectionModel(
+                    id = id,
+                    appName = appName,
+                    appPackageName = appPackageName,
+                    dateTime = dateTime,
+                    year = year,
+                    month = month,
+                    day = day,
+                    hour = hour,
+                    minute = minute,
+                    isRepeatable = isRepeatable,
+                    isExecuted = isExecuted
+                )
+                latestAppToOpen.add(appSelected)
+
+            } while (cursor.moveToNext())
+        }
+        /*Log.d("latestAppName", latestAppToOpen[0].appName!!)
+        Log.d("latestPack", latestAppToOpen[0].appPackageName!!)
+        Log.d("latestDate", latestAppToOpen[0].dateTime!!)
+        Log.d("latestPack", latestAppToOpen.size.toString())*/
+
+        val alarmMgr = context.getSystemService(Context.ALARM_SERVICE) as AlarmManager
+        val alarmIntent = Intent(context, OpenAppReceiver::class.java).let { intent ->
+            intent.putExtra(Constants.appPackageName, latestAppToOpen[0].appPackageName)
+            PendingIntent.getBroadcast(context, 0, intent, PendingIntent.FLAG_UPDATE_CURRENT)
+        }
+        val calendar: Calendar = Calendar.getInstance().apply {
+            timeInMillis = System.currentTimeMillis()
+            latestAppToOpen[0].year?.let { it1 -> set(Calendar.YEAR, it1.toInt()) }
+            latestAppToOpen[0].month?.let { it1 -> set(Calendar.MONTH, it1.toInt()) }
+            latestAppToOpen[0].day?.let { it1 -> set(Calendar.DAY_OF_MONTH, it1.toInt()) }
+            latestAppToOpen[0].hour?.toInt()?.let { it1 -> set(Calendar.HOUR_OF_DAY, it1) }
+            latestAppToOpen[0].minute?.toInt()?.let { it1 -> set(Calendar.MINUTE, it1) }
+            set(Calendar.SECOND, 0)
+        }
+
+        alarmMgr.set(
+            AlarmManager.RTC_WAKEUP,
+            calendar.timeInMillis,
+            alarmIntent
+        )
+
+        /*alarmMgr.setRepeating(
+                AlarmManager.RTC_WAKEUP,
+                calendar.timeInMillis,
+                1000 * 60 * 60 * 24,
+                alarmIntent
+            )*/
     }
 }
