@@ -34,6 +34,7 @@ class OpenAppReceiver : BroadcastReceiver() {
                 app.id,
                 app.appName,
                 app.appPackageName,
+                app.note,
                 app.dateTime,
                 app.year,
                 app.month,

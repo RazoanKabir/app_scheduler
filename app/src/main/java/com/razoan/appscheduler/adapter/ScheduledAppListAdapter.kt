@@ -34,6 +34,11 @@ class ScheduledAppListAdapter(var apps: ArrayList<AppSelectionModel>) : Recycler
         holder.tvNameOfApp?.text = apps[position].appName
         holder.tvPackageNameOfApp?.text = apps[position].appPackageName
         holder.tvPackageSelectionDate?.text = apps[position].dateTime
+        if(!apps[position].note.isNullOrEmpty()){
+            holder.tvNote?.text = apps[position].note
+            holder.tvNote?.visibility = View.VISIBLE
+        }
+        holder.tvPackageSelectionDate?.visibility = View.VISIBLE
     }
 
     class ParentViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
@@ -41,6 +46,7 @@ class ScheduledAppListAdapter(var apps: ArrayList<AppSelectionModel>) : Recycler
         val tvNameOfApp: TextView? = itemView.findViewById<TextView>(R.id.tvNameOfApp)
         val tvPackageNameOfApp: TextView? = itemView.findViewById<TextView>(R.id.tvPackageNameOfApp)
         val tvPackageSelectionDate: TextView? = itemView.findViewById<TextView>(R.id.tvPackageSelectionDate)
+        val tvNote: TextView? = itemView.findViewById<TextView>(R.id.tvNote)
         val rlAppItem: RelativeLayout? = itemView.findViewById<RelativeLayout>(R.id.rlAppItem)
     }
 }

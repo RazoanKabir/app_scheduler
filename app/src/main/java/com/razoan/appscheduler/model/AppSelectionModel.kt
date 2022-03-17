@@ -7,6 +7,7 @@ data class AppSelectionModel(
     val id: Int?,
     val appName: String?,
     val appPackageName: String?,
+    val note: String?,
     val dateTime: String?,
     val year: String?,
     val month: String?,

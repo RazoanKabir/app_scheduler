@@ -142,6 +142,7 @@ class AddAppActivity : AppCompatActivity() {
                     0,
                     tvAppName.text.toString(),
                     tvPackageName.text.toString(),
+                    etNote.text.toString(),
                     "${tvDate.text} ${tvTime.text}",
                     yearSelected.toString(),
                     monthSelected.toString(),

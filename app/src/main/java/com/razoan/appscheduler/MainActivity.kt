@@ -58,6 +58,10 @@ class MainActivity : AppCompatActivity() {
         addApp.setOnClickListener {
             UtilClass.goToNextActivity(this, AddAppActivity:: class.java)
         }
+        srDashboard.setOnRefreshListener {
+            checkOverlayPermission()
+            srDashboard.isRefreshing = false
+        }
 
     }
 }

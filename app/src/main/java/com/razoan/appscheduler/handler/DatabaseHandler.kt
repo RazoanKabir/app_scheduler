@@ -10,8 +10,6 @@ import android.database.Cursor
 import android.database.sqlite.SQLiteDatabase
 import android.database.sqlite.SQLiteException
 import android.database.sqlite.SQLiteOpenHelper
-import android.util.Log
-import com.google.gson.Gson
 import com.razoan.appscheduler.model.AppSelectionModel
 import com.razoan.appscheduler.util.Constants
 import com.razoan.appscheduler.util.OpenAppReceiver
@@ -28,6 +26,7 @@ class DatabaseHandler(context: Context) :
         private var KEY_ID = "_id"
         private var KEY_NAME = "app_name"
         private var KEY_PACKAGE_NAME = "package_name"
+        private var KEY_NOTE = "note"
         private var KEY_DATE_TIME = "date_time"
         private var KEY_YEAR = "year"
         private var KEY_MONTH = "month"
@@ -44,6 +43,7 @@ class DatabaseHandler(context: Context) :
                 + KEY_ID + " INTEGER PRIMARY KEY AUTOINCREMENT,"
                 + KEY_NAME + " TEXT,"
                 + KEY_PACKAGE_NAME + " TEXT,"
+                + KEY_NOTE + " TEXT,"
                 + KEY_DATE_TIME + " TEXT,"
                 + KEY_YEAR + " TEXT,"
                 + KEY_MONTH + " TEXT,"
@@ -67,6 +67,7 @@ class DatabaseHandler(context: Context) :
 
         contentValues.put(KEY_NAME, app.appName)
         contentValues.put(KEY_PACKAGE_NAME, app.appPackageName)
+        contentValues.put(KEY_NOTE, app.note)
         contentValues.put(KEY_DATE_TIME, app.dateTime)
         contentValues.put(KEY_YEAR, app.year)
         contentValues.put(KEY_MONTH, app.month)
@@ -104,6 +105,7 @@ class DatabaseHandler(context: Context) :
         var id: Int
         var appName: String
         var appPackageName: String
+        var note: String
         var dateTime: String
         var year: String
         var month: String
@@ -118,6 +120,7 @@ class DatabaseHandler(context: Context) :
                 id = cursor.getInt(cursor.getColumnIndex(KEY_ID))
                 appName = cursor.getString(cursor.getColumnIndex(KEY_NAME))
                 appPackageName = cursor.getString(cursor.getColumnIndex(KEY_PACKAGE_NAME))
+                note = cursor.getString(cursor.getColumnIndex(KEY_NOTE))
                 dateTime = cursor.getString(cursor.getColumnIndex(KEY_DATE_TIME))
                 year = cursor.getString(cursor.getColumnIndex(KEY_YEAR))
                 month = cursor.getString(cursor.getColumnIndex(KEY_MONTH))
@@ -131,6 +134,7 @@ class DatabaseHandler(context: Context) :
                     id = id,
                     appName = appName,
                     appPackageName = appPackageName,
+                    note = note,
                     dateTime = dateTime,
                     year = year,
                     month = month,
@@ -152,6 +156,7 @@ class DatabaseHandler(context: Context) :
         val contentValues = ContentValues()
         contentValues.put(KEY_NAME, app.appName)
         contentValues.put(KEY_PACKAGE_NAME, app.appPackageName)
+        contentValues.put(KEY_NOTE, app.note)
         contentValues.put(KEY_DATE_TIME, app.dateTime)
         contentValues.put(KEY_YEAR, app.year)
         contentValues.put(KEY_MONTH, app.month)
@@ -188,6 +193,7 @@ class DatabaseHandler(context: Context) :
         var id: Int
         var appName: String
         var appPackageName: String
+        var note: String
         var dateTime: String
         var year: String
         var month: String
@@ -202,6 +208,7 @@ class DatabaseHandler(context: Context) :
                 id = cursor.getInt(cursor.getColumnIndex(KEY_ID))
                 appName = cursor.getString(cursor.getColumnIndex(KEY_NAME))
                 appPackageName = cursor.getString(cursor.getColumnIndex(KEY_PACKAGE_NAME))
+                note = cursor.getString(cursor.getColumnIndex(KEY_NOTE))
                 dateTime = cursor.getString(cursor.getColumnIndex(KEY_DATE_TIME))
                 year = cursor.getString(cursor.getColumnIndex(KEY_YEAR))
                 month = cursor.getString(cursor.getColumnIndex(KEY_MONTH))
@@ -215,6 +222,7 @@ class DatabaseHandler(context: Context) :
                     id = id,
                     appName = appName,
                     appPackageName = appPackageName,
+                    note = note,
                     dateTime = dateTime,
                     year = year,
                     month = month,
