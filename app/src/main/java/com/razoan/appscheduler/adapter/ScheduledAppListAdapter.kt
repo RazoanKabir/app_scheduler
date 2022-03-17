@@ -8,7 +8,6 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.LinearLayout
-import android.widget.RelativeLayout
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.razoan.appscheduler.AddAppActivity
@@ -16,8 +15,9 @@ import com.razoan.appscheduler.R
 import com.razoan.appscheduler.model.AppSelectionModel
 import com.razoan.appscheduler.util.Constants
 import kotlinx.serialization.json.Json
+import com.razoan.appscheduler.util.ViewDialog
 
-class ScheduledAppListAdapter(var apps: ArrayList<AppSelectionModel>) : RecyclerView.Adapter<ScheduledAppListAdapter.ParentViewHolder>() {
+class ScheduledAppListAdapter(var apps: ArrayList<AppSelectionModel>, private val deletedApp: ViewDialog.DeletedApp) : RecyclerView.Adapter<ScheduledAppListAdapter.ParentViewHolder>() {
 
     private lateinit var context: Context
     private var activity: Activity? = null
@@ -54,7 +54,8 @@ class ScheduledAppListAdapter(var apps: ArrayList<AppSelectionModel>) : Recycler
         }
 
         holder.ivDelete?.setOnClickListener {
-
+            val alert = ViewDialog()
+            alert.showDialog(context as Activity, apps[position], deletedApp)
         }
     }
 

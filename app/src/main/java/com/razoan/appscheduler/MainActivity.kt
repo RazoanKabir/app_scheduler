@@ -7,15 +7,17 @@ import android.provider.Settings
 import android.view.View
 import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.razoan.appscheduler.adapter.AppListAdapter
 import com.razoan.appscheduler.adapter.ScheduledAppListAdapter
 import com.razoan.appscheduler.handler.DatabaseHandler
 import com.razoan.appscheduler.model.AppSelectionModel
 import com.razoan.appscheduler.util.UtilClass
+import com.razoan.appscheduler.util.ViewDialog
 import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.activity_main.rlAppList
 import kotlinx.android.synthetic.main.activity_main.rvAppList
 
-class MainActivity : AppCompatActivity() {
+class MainActivity : AppCompatActivity(), ViewDialog.DeletedApp {
     private var scheduledAppListAdapter: ScheduledAppListAdapter? = null
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -43,7 +45,7 @@ class MainActivity : AppCompatActivity() {
                 rvAppList?.layoutManager = LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false)
                 rvAppList?.setHasFixedSize(true)
                 rvAppList?.isNestedScrollingEnabled = false
-                scheduledAppListAdapter = ScheduledAppListAdapter(selectedAppList)
+                scheduledAppListAdapter = ScheduledAppListAdapter(selectedAppList, this)
                 rvAppList?.adapter = scheduledAppListAdapter
                 rlAppList.visibility = View.VISIBLE
             } else {
@@ -63,5 +65,9 @@ class MainActivity : AppCompatActivity() {
             srDashboard.isRefreshing = false
         }
 
+    }
+
+    override fun appDeleted(isDeleted: Boolean) {
+        if(isDeleted) checkOverlayPermission()
     }
 }

@@ -14,4 +14,10 @@
     <string name="canNotSavedRecord">App can not be scheduled, please try again</string>
     <string name="recordUpdated">Record updated</string>
     <string name="canNotUpdateRecord">Can not be updated, please try again.</string>
+    <string name="delete_title">Delete?</string>
+    <string name="cancelDialog">Cancel the dialog</string>
+    <string name="no">No</string>
+    <string name="delete_item">Delete this schedule</string>
+    <string name="ok">Yes</string>
+    <string name="removeThisApp">Remove this app from the list?</string>
 </resources>

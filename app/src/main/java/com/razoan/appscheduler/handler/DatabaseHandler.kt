@@ -171,6 +171,15 @@ class DatabaseHandler(context: Context) :
         return success
     }
 
+    fun deleteSchedule(app: AppSelectionModel?): Int {
+        val db = this.writableDatabase
+        val contentValues = ContentValues()
+        contentValues.put(KEY_ID, app?.id)
+        val success = db.delete(TABLE_SCHEDULER, KEY_ID + "=" + app?.id, null)
+        db.close()
+        return success
+    }
+
     @SuppressLint("Range")
     fun setLatestScheduledApp(context: Context) {
 
