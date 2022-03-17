@@ -1,6 +1,9 @@
 package com.razoan.appscheduler.model
 
-class AppSelectionModel(
+import kotlinx.serialization.Serializable
+
+@Serializable
+data class AppSelectionModel(
     val id: Int?,
     val appName: String?,
     val appPackageName: String?,

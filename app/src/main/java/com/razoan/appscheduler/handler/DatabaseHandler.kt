@@ -11,9 +11,11 @@ import android.database.sqlite.SQLiteDatabase
 import android.database.sqlite.SQLiteException
 import android.database.sqlite.SQLiteOpenHelper
 import android.util.Log
+import com.google.gson.Gson
 import com.razoan.appscheduler.model.AppSelectionModel
 import com.razoan.appscheduler.util.Constants
 import com.razoan.appscheduler.util.OpenAppReceiver
+import kotlinx.serialization.json.Json
 import java.util.*
 import kotlin.collections.ArrayList
 
@@ -230,33 +232,35 @@ class DatabaseHandler(context: Context) :
         Log.d("latestPack", latestAppToOpen[0].appPackageName!!)
         Log.d("latestDate", latestAppToOpen[0].dateTime!!)
         Log.d("latestPack", latestAppToOpen.size.toString())*/
+        if(latestAppToOpen.size > 0) {
+            val appToJson = Json.encodeToString(AppSelectionModel.serializer(), latestAppToOpen[0])
+            val alarmMgr = context.getSystemService(Context.ALARM_SERVICE) as AlarmManager
+            val alarmIntent = Intent(context, OpenAppReceiver::class.java).let { intent ->
+                intent.putExtra(Constants.appToJSON, appToJson)
+                PendingIntent.getBroadcast(context, 0, intent, PendingIntent.FLAG_UPDATE_CURRENT)
+            }
+            val calendar: Calendar = Calendar.getInstance().apply {
+                timeInMillis = System.currentTimeMillis()
+                latestAppToOpen[0].year?.let { it1 -> set(Calendar.YEAR, it1.toInt()) }
+                latestAppToOpen[0].month?.let { it1 -> set(Calendar.MONTH, it1.toInt()) }
+                latestAppToOpen[0].day?.let { it1 -> set(Calendar.DAY_OF_MONTH, it1.toInt()) }
+                latestAppToOpen[0].hour?.toInt()?.let { it1 -> set(Calendar.HOUR_OF_DAY, it1) }
+                latestAppToOpen[0].minute?.toInt()?.let { it1 -> set(Calendar.MINUTE, it1) }
+                set(Calendar.SECOND, 0)
+            }
 
-        val alarmMgr = context.getSystemService(Context.ALARM_SERVICE) as AlarmManager
-        val alarmIntent = Intent(context, OpenAppReceiver::class.java).let { intent ->
-            intent.putExtra(Constants.appPackageName, latestAppToOpen[0].appPackageName)
-            PendingIntent.getBroadcast(context, 0, intent, PendingIntent.FLAG_UPDATE_CURRENT)
-        }
-        val calendar: Calendar = Calendar.getInstance().apply {
-            timeInMillis = System.currentTimeMillis()
-            latestAppToOpen[0].year?.let { it1 -> set(Calendar.YEAR, it1.toInt()) }
-            latestAppToOpen[0].month?.let { it1 -> set(Calendar.MONTH, it1.toInt()) }
-            latestAppToOpen[0].day?.let { it1 -> set(Calendar.DAY_OF_MONTH, it1.toInt()) }
-            latestAppToOpen[0].hour?.toInt()?.let { it1 -> set(Calendar.HOUR_OF_DAY, it1) }
-            latestAppToOpen[0].minute?.toInt()?.let { it1 -> set(Calendar.MINUTE, it1) }
-            set(Calendar.SECOND, 0)
-        }
-
-        alarmMgr.set(
-            AlarmManager.RTC_WAKEUP,
-            calendar.timeInMillis,
-            alarmIntent
-        )
-
-        /*alarmMgr.setRepeating(
+            alarmMgr.set(
                 AlarmManager.RTC_WAKEUP,
                 calendar.timeInMillis,
-                1000 * 60 * 60 * 24,
                 alarmIntent
-            )*/
+            )
+
+            /*alarmMgr.setRepeating(
+                    AlarmManager.RTC_WAKEUP,
+                    calendar.timeInMillis,
+                    1000 * 60 * 60 * 24,
+                    alarmIntent
+                )*/
+        }
     }
 }
