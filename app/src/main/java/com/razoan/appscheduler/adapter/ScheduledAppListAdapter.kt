@@ -54,8 +54,8 @@ class ScheduledAppListAdapter(var apps: ArrayList<AppSelectionModel>, private va
         }
 
         holder.ivDelete?.setOnClickListener {
-            val alert = ViewDialog()
-            alert.showDialog(context as Activity, apps[position], deletedApp)
+            val alert = ViewDialog(context)
+            alert.showDeleteDialog(apps[position], deletedApp)
         }
     }
 

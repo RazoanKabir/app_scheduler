@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="@dimen/_300sdp"
     android:layout_gravity="center"
@@ -25,23 +24,23 @@
             app:cardCornerRadius="@dimen/_8sdp">
 
             <TextView
+                android:id="@+id/tvDialogTitle"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center_horizontal"
                 android:layout_marginTop="@dimen/_14sdp"
                 android:gravity="center"
-                android:text="@string/delete_title"
                 android:textColor="@color/warning"
                 android:textSize="@dimen/_14sdp" />
 
             <TextView
+                android:id="@+id/tvDialogSubTitle"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
                 android:layout_marginEnd="20dp"
                 android:layout_marginStart="20dp"
                 android:gravity="center"
-                android:text="@string/removeThisApp"
                 android:textSize="@dimen/_12sdp"
                 android:textStyle="bold" />
 
@@ -57,19 +56,22 @@
         android:layout_marginTop="@dimen/_50sdp">
 
         <com.google.android.material.floatingactionbutton.FloatingActionButton
+            android:id="@+id/fabNo"
             android:layout_width="@dimen/_43sdp"
             android:layout_height="@dimen/_43sdp"
             app:backgroundTint="@color/soft_green"
             android:padding="@dimen/_5sdp"
+            android:elevation="0dp"
+            app:elevation="0dp"
             android:contentDescription="@string/cancelDialog" />
 
         <TextView
+            android:id="@+id/tvNo"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
-            android:elevation="@dimen/_5sdp"
             android:text="@string/no"
-            android:textAppearance="?android:attr/textAppearanceMedium"
+            android:textAppearance="?android:attr/textAppearanceButton"
             android:textColor="@android:color/white" />
     </FrameLayout>
 
@@ -82,18 +84,21 @@
         android:layout_marginTop="@dimen/_50sdp">
 
         <com.google.android.material.floatingactionbutton.FloatingActionButton
+            android:id="@+id/fabYes"
             android:layout_width="@dimen/_40sdp"
             android:layout_height="@dimen/_40sdp"
+            android:elevation="0dp"
+            app:elevation="0dp"
             app:backgroundTint="@color/warning"
             android:contentDescription="@string/delete_item" />
 
         <TextView
+            android:id="@+id/tvYes"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
-            android:elevation="@dimen/_5sdp"
             android:text="@string/ok"
-            android:textAppearance="?android:attr/textAppearanceMedium"
+            android:textAppearance="?android:attr/textAppearanceButton"
             android:textColor="@android:color/white" />
     </FrameLayout>
 </FrameLayout>

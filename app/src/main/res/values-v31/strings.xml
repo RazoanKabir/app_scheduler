@@ -25,4 +25,7 @@
     <string name="deleteAllSchedule">Delete All Schedules</string>
     <string name="restartAllSchedule">Restart all schedules</string>
     <string name="pleaseSelectApp">Please select an app to continue.</string>
+    <string name="need_permission">Need Permission</string>
+    <string name="need_overlay_permission">Do you want to allow overlay permission?</string>
+    <string name="cantContinue">"Without the overlay permission you can not continue. "</string>
 </resources>

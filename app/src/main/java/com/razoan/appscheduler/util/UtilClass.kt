@@ -13,9 +13,11 @@ class UtilClass {
             context.startActivity(`in`)
         }
 
-        fun goToNextActivityWithBundle(context: Context, bundle: Bundle?, targetActivity: Class<out Activity?>?) {
+        fun goToNextActivityByClearingHistory(
+            context: Context,
+            targetActivity: Class<out Activity?>?
+        ) {
             val `in` = Intent(context, targetActivity)
-            `in`.putExtras(bundle!!)
             `in`.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
             context.startActivity(`in`)
         }

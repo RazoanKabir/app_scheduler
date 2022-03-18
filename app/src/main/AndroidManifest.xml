@@ -16,7 +16,7 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.AppScheduler">
         <activity
-            android:name=".MainActivity"
+            android:name=".StartingActivity"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -24,6 +24,9 @@
             </intent-filter>
         </activity>
         <activity android:name=".AddAppActivity"
+            android:theme="@style/Theme.AppScheduler"
+            android:screenOrientation="fullSensor"/>
+        <activity android:name=".MainActivity"
             android:theme="@style/Theme.AppScheduler"
             android:screenOrientation="fullSensor"/>
         <activity android:name=".AppListActivity"

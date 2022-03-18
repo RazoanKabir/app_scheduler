@@ -1,9 +1,6 @@
 package com.razoan.appscheduler.viewmodel
 
 import android.content.Context
-import android.content.Intent
-import android.net.Uri
-import android.provider.Settings
 import android.view.View
 import android.widget.RelativeLayout
 import androidx.lifecycle.ViewModel
@@ -14,17 +11,11 @@ import com.razoan.appscheduler.handler.DatabaseHandler
 import com.razoan.appscheduler.model.AppSelectionModel
 import com.razoan.appscheduler.util.ViewDialog
 
+
 class MainViewModel : ViewModel() {
     fun deleteAll(context: Context ,selectedAppList: ArrayList<AppSelectionModel>) {
         for(i in 0 until selectedAppList.size) {
             DatabaseHandler(context).deleteSchedule(selectedAppList[i].id)
-        }
-    }
-    fun setOverlay(context: Context, packageName: String) {
-        Intent(Settings.ACTION_MANAGE_OVERLAY_PERMISSION, Uri.parse("package:$packageName")).apply {
-            addCategory(Intent.CATEGORY_DEFAULT)
-            addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
-            context.startActivity(this)
         }
     }
 

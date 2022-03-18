@@ -1,11 +1,9 @@
 package com.razoan.appscheduler
 
 import android.os.Bundle
-import android.provider.Settings
 import android.view.Menu
 import android.view.MenuItem
 import androidx.appcompat.app.AppCompatActivity
-import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
 import androidx.lifecycle.ViewModelProvider
 import com.razoan.appscheduler.model.AppSelectionModel
 import com.razoan.appscheduler.util.UtilClass
@@ -20,16 +18,15 @@ class MainActivity : AppCompatActivity(), ViewDialog.DeletedApp {
     private var mainVM: MainViewModel? = null
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        installSplashScreen()
         setContentView(R.layout.activity_main)
         initActionBar()
         initView()
-        checkOverlayPermission()
+        updateUI()
         initListener()
     }
 
     private fun initView() {
-        mainVM = ViewModelProvider(this).get(MainViewModel::class.java)
+        mainVM = ViewModelProvider(this)[MainViewModel::class.java]
     }
 
     private fun initActionBar() {
@@ -40,23 +37,20 @@ class MainActivity : AppCompatActivity(), ViewDialog.DeletedApp {
 
     override fun onResume() {
         super.onResume()
-        checkOverlayPermission()
+        updateUI()
     }
 
-    private fun checkOverlayPermission() {
-        if (!Settings.canDrawOverlays(this))
-            mainVM?.setOverlay(this, packageName)
-        else
-            mainVM?.viewAppList(this, rvAppList, rlAppList, rlEmptyView, this)
-
+    private fun updateUI() {
+        mainVM?.viewAppList(this, rvAppList, rlAppList, rlEmptyView, this)
     }
+
 
     private fun initListener() {
         fabNewApp.setOnClickListener {
             UtilClass.goToNextActivity(this, AddAppActivity::class.java)
         }
         srDashboard.setOnRefreshListener {
-            checkOverlayPermission()
+            updateUI()
             srDashboard.isRefreshing = false
         }
     }
@@ -83,10 +77,10 @@ class MainActivity : AppCompatActivity(), ViewDialog.DeletedApp {
 
     private fun deleteAllSchedules() {
         if (selectedAppList.size > 0) mainVM?.deleteAll(this, selectedAppList)
-        checkOverlayPermission()
+        updateUI()
     }
 
     override fun appDeleted(isDeleted: Boolean) {
-        if (isDeleted) checkOverlayPermission()
+        if (isDeleted) updateUI()
     }
 }
