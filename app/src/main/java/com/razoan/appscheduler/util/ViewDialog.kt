@@ -30,7 +30,7 @@ class ViewDialog(private var context: Context?) {
         title?.text = context?.getString(R.string.delete_title)
         subTitle?.text = context?.getString(R.string.removeThisApp)
         mDialogNo?.setOnClickListener {
-           dialog.dismiss()
+            dialog.dismiss()
         }
         mDialogOk?.setOnClickListener {
             context?.let { it1 -> DatabaseHandler(it1).deleteSchedule(app?.id) }

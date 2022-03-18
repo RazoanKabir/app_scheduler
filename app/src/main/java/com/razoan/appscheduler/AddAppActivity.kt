@@ -56,8 +56,11 @@ class AddAppActivity : AppCompatActivity() {
                 appPackageName = intent.getStringExtra(Constants.appPackageName)
                 setAppInfoFromSelection(appName, appPackageName)
             }
-            if(intent.getStringExtra(Constants.appToJSON) != null) {
-                app = Gson().fromJson<AppSelectionModel>(intent?.getStringExtra(Constants.appToJSON), AppSelectionModel::class.java)
+            if (intent.getStringExtra(Constants.appToJSON) != null) {
+                app = Gson().fromJson<AppSelectionModel>(
+                    intent?.getStringExtra(Constants.appToJSON),
+                    AppSelectionModel::class.java
+                )
                 setAppInfoForEdit(app)
             }
         }
@@ -86,8 +89,8 @@ class AddAppActivity : AppCompatActivity() {
     @SuppressLint("SimpleDateFormat", "SetTextI18n")
     private fun setAppInfoForEdit(app: AppSelectionModel?) {
         setAppInfoFromSelection(app?.appName, app?.appPackageName)
-        val aa = if (app?.hour?.toInt()!! > 11)  ("pm") else ("am")
-        val hour = if (app.hour.toInt() > 12)  (app.hour.toInt()-12) else (app.hour)
+        val aa = if (app?.hour?.toInt()!! > 11) ("pm") else ("am")
+        val hour = if (app.hour.toInt() > 12) (app.hour.toInt() - 12) else (app.hour)
         etNote.setText(app.note)
         tvDate.text = "${app.day}/${app.month}/${app.year}"
         tvTime.text = "${hour}:${app.minute} $aa"
@@ -153,9 +156,9 @@ class AddAppActivity : AppCompatActivity() {
         }
 
         btnScheduleApp.setOnClickListener {
-            if(app != null) {
-              updateApp()
-           } else addApp()
+            if (app != null) {
+                updateApp()
+            } else addApp()
         }
 
         ivBack.setOnClickListener {
@@ -164,7 +167,7 @@ class AddAppActivity : AppCompatActivity() {
     }
 
     private fun updateApp() {
-        if(tvAppName.text.isNullOrEmpty() || tvPackageName.text.isNullOrEmpty()) {
+        if (tvAppName.text.isNullOrEmpty() || tvPackageName.text.isNullOrEmpty()) {
             UtilClass.showToast(this, getString(R.string.pleaseSelectApp))
             return
         }
@@ -188,7 +191,7 @@ class AddAppActivity : AppCompatActivity() {
     }
 
     private fun addApp() {
-        if(tvAppName.text.isNullOrEmpty() || tvPackageName.text.isNullOrEmpty()) {
+        if (tvAppName.text.isNullOrEmpty() || tvPackageName.text.isNullOrEmpty()) {
             UtilClass.showToast(this, getString(R.string.pleaseSelectApp))
             return
         }

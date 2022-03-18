@@ -25,13 +25,13 @@ class AppListAdapter(var apps: ArrayList<PackageAppInfo>, private val selectedAp
     override fun onCreateViewHolder(
         parent: ViewGroup,
         viewType: Int
-    ): AppListAdapter.ParentViewHolder {
+    ): ParentViewHolder {
         context = parent.context
         activity = parent.context as Activity?
 
         val view =
             LayoutInflater.from(parent.context).inflate(R.layout.item_app_list, parent, false)
-        return AppListAdapter.ParentViewHolder(view)
+        return ParentViewHolder(view)
     }
 
     override fun getItemCount(): Int {

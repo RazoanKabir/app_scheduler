@@ -125,10 +125,6 @@ class DatabaseHandler(context: Context) :
         val selectQuery =
             "SELECT  * FROM $TABLE_SCHEDULER WHERE $KEY_IS_EXECUTED = '0' ORDER BY $KEY_DATE_TIME ASC LIMIT 1"
         val latestAppToOpen = getList(selectQuery)
-        /*Log.d("latestAppName", latestAppToOpen[0].appName!!)
-        Log.d("latestPack", latestAppToOpen[0].appPackageName!!)
-        Log.d("latestDate", latestAppToOpen[0].dateTime!!)
-        Log.d("latestPack", latestAppToOpen.size.toString())*/
         if (latestAppToOpen.size > 0) {
             val appToJson = Json.encodeToString(AppSelectionModel.serializer(), latestAppToOpen[0])
             val alarmMgr = context.getSystemService(Context.ALARM_SERVICE) as AlarmManager

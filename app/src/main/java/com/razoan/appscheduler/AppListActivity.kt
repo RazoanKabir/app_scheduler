@@ -33,7 +33,8 @@ class AppListActivity : AppCompatActivity(), AppListAdapter.SelectedApp {
     private fun setObserver() {
         appListVm?.appsListLiveData?.observe(this, androidx.lifecycle.Observer {
             if (it.size > 0) {
-                rvAppList?.layoutManager = LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false)
+                rvAppList?.layoutManager =
+                    LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false)
                 rvAppList?.setHasFixedSize(true)
                 rvAppList?.isNestedScrollingEnabled = false
                 appListAdapter = AppListAdapter(it, this)

@@ -5,7 +5,6 @@ import android.view.Menu
 import android.view.MenuItem
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.ViewModelProvider
-import com.razoan.appscheduler.model.AppSelectionModel
 import com.razoan.appscheduler.util.UtilClass
 import com.razoan.appscheduler.util.ViewDialog
 import com.razoan.appscheduler.viewmodel.MainViewModel
@@ -14,7 +13,6 @@ import kotlinx.android.synthetic.main.activity_main.*
 class MainActivity : AppCompatActivity(), ViewDialog.DeletedApp {
     private var toolbarMenu: Menu? = null
     private var menuOption: MenuItem? = null
-    private var selectedAppList: ArrayList<AppSelectionModel> = ArrayList()
     private var mainVM: MainViewModel? = null
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)

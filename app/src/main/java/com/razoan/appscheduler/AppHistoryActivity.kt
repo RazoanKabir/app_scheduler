@@ -9,7 +9,7 @@ import com.razoan.appscheduler.handler.DatabaseHandler
 import com.razoan.appscheduler.model.AppSelectionModel
 import kotlinx.android.synthetic.main.activity_app_history.*
 
-class AppHistoryActivity: AppCompatActivity() {
+class AppHistoryActivity : AppCompatActivity() {
     private var appHistoryListAdapter: AppHistoryListAdapter? = null
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -17,6 +17,7 @@ class AppHistoryActivity: AppCompatActivity() {
         initView()
         intiListener()
     }
+
     private fun intiListener() {
         srDashboard.setOnRefreshListener {
             initView()
@@ -29,9 +30,11 @@ class AppHistoryActivity: AppCompatActivity() {
     }
 
     private fun initView() {
-        val selectedAppList: ArrayList<AppSelectionModel> = DatabaseHandler(this).viewScheduledAppHistory()
-        if(selectedAppList.size > 0) {
-            rvAppHistoryList?.layoutManager = LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false)
+        val selectedAppList: ArrayList<AppSelectionModel> =
+            DatabaseHandler(this).viewScheduledAppHistory()
+        if (selectedAppList.size > 0) {
+            rvAppHistoryList?.layoutManager =
+                LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false)
             rvAppHistoryList?.setHasFixedSize(true)
             rvAppHistoryList?.isNestedScrollingEnabled = false
             appHistoryListAdapter = AppHistoryListAdapter(selectedAppList)

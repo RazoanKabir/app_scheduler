@@ -47,12 +47,11 @@ class OpenAppReceiver : BroadcastReceiver() {
         )
         if (status > -1) {
             status = DatabaseHandler(context).deleteSchedule(app.id).toLong()
-            if(status >-1)
-            DatabaseHandler(context).setLatestScheduledApp(context)
+            if (status > -1)
+                DatabaseHandler(context).setLatestScheduledApp(context)
         }
 
     }
-
 
     private fun isPackageInstalled(packageName: String, packageManager: PackageManager): Boolean {
         var found = true

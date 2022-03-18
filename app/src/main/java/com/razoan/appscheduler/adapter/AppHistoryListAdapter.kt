@@ -6,13 +6,13 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
-import android.widget.LinearLayout
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.razoan.appscheduler.R
 import com.razoan.appscheduler.model.AppSelectionModel
 
-class AppHistoryListAdapter(var apps: ArrayList<AppSelectionModel>) : RecyclerView.Adapter<AppHistoryListAdapter.ParentViewHolder>() {
+class AppHistoryListAdapter(var apps: ArrayList<AppSelectionModel>) :
+    RecyclerView.Adapter<AppHistoryListAdapter.ParentViewHolder>() {
 
     private lateinit var context: Context
     private var activity: Activity? = null
@@ -21,7 +21,8 @@ class AppHistoryListAdapter(var apps: ArrayList<AppSelectionModel>) : RecyclerVi
         context = parent.context
         activity = parent.context as Activity?
 
-        val view = LayoutInflater.from(parent.context).inflate(R.layout.item_app_list, parent, false)
+        val view =
+            LayoutInflater.from(parent.context).inflate(R.layout.item_app_list, parent, false)
         return ParentViewHolder(view)
     }
 
@@ -35,7 +36,7 @@ class AppHistoryListAdapter(var apps: ArrayList<AppSelectionModel>) : RecyclerVi
         holder.tvPackageNameOfApp?.text = apps[position].appPackageName
         holder.tvPackageSelectionDate?.text = apps[position].dateTime
         holder.tvPackageSelectionDate?.visibility = View.VISIBLE
-        if(!apps[position].note.isNullOrEmpty()){
+        if (!apps[position].note.isNullOrEmpty()) {
             holder.tvNote?.text = apps[position].note
             holder.tvNote?.visibility = View.VISIBLE
         }
@@ -45,7 +46,8 @@ class AppHistoryListAdapter(var apps: ArrayList<AppSelectionModel>) : RecyclerVi
         val ivIcon: ImageView? = itemView.findViewById<ImageView>(R.id.ivSelectedAppIcon)
         val tvNameOfApp: TextView? = itemView.findViewById<TextView>(R.id.tvNameOfApp)
         val tvPackageNameOfApp: TextView? = itemView.findViewById<TextView>(R.id.tvPackageNameOfApp)
-        val tvPackageSelectionDate: TextView? = itemView.findViewById<TextView>(R.id.tvPackageSelectionDate)
+        val tvPackageSelectionDate: TextView? =
+            itemView.findViewById<TextView>(R.id.tvPackageSelectionDate)
         val tvNote: TextView? = itemView.findViewById<TextView>(R.id.tvNote)
     }
 }
