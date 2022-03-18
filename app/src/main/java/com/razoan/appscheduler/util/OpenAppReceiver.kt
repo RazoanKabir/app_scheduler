@@ -29,7 +29,7 @@ class OpenAppReceiver : BroadcastReceiver() {
     }
 
     private fun updateLatestAppToOpen(context: Context, app: AppSelectionModel) {
-        val status = DatabaseHandler(context).updateSchedule(
+        var status = DatabaseHandler(context).addAppHistory(
             AppSelectionModel(
                 app.id,
                 app.appName,
@@ -45,8 +45,12 @@ class OpenAppReceiver : BroadcastReceiver() {
                 "1"
             )
         )
+        if (status > -1) {
+            status = DatabaseHandler(context).deleteSchedule(app.id).toLong()
+            if(status >-1)
+            DatabaseHandler(context).setLatestScheduledApp(context)
+        }
 
-        if (status > -1) DatabaseHandler(context).setLatestScheduledApp(context)
     }
 
 

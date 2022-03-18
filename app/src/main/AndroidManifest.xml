@@ -25,10 +25,15 @@
         </activity>
         <activity android:name=".AddAppActivity"
             android:theme="@style/Theme.AppScheduler"
-            android:screenOrientation="portrait"/>
+            android:screenOrientation="fullSensor"/>
         <activity android:name=".AppListActivity"
             android:theme="@style/Theme.AppScheduler"
-            android:screenOrientation="portrait"
+            android:screenOrientation="fullSensor"
+            android:windowSoftInputMode="stateAlwaysHidden"/>
+
+        <activity android:name=".AppHistoryActivity"
+            android:theme="@style/Theme.AppScheduler"
+            android:screenOrientation="fullSensor"
             android:windowSoftInputMode="stateAlwaysHidden"/>
 
         <receiver android:enabled="true" android:name=".util.OpenAppReceiver"

@@ -1,7 +1,7 @@
 <resources>
     <string name="app_name">App Scheduler</string>
     <string name="appSchedulerTitle">App Scheduler</string>
-    <string name="emptyListHome">No app added. Create a new one by clicking the add button at the top.</string>
+    <string name="emptyListHome">No app added. Create a new one by clicking on the <b>ADD APP</b> button.</string>
     <string name="addApp">Add app for scheduling</string>
     <string name="scheduleApp">Schedule App</string>
     <string name="selectApp">Select App</string>
@@ -22,4 +22,9 @@
     <string name="delete_item">Delete this schedule</string>
     <string name="ok">Yes</string>
     <string name="removeThisApp">Remove this app from the list?</string>
+    <string name="appSchedulerHistoryTitle">App History</string>
+    <string name="addNewApp">Add App</string>
+    <string name="deleteAllSchedule">Delete All Schedules</string>
+    <string name="restartAllSchedule">Restart all schedules</string>
+    <string name="pleaseSelectApp">Please select an app to continue.</string>
 </resources>

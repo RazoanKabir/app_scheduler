@@ -20,10 +20,17 @@ class AppListActivity : AppCompatActivity(), AppListAdapter.SelectedApp {
         setContentView(R.layout.activity_app_list)
         appListVm = ViewModelProvider(this)[AppListViewModel::class.java]
         appListVm?.execute(this)
-        setObserVer()
+        setObserver()
+        initListener()
     }
 
-    private fun setObserVer() {
+    private fun initListener() {
+        ivBack.setOnClickListener {
+            onBackPressed()
+        }
+    }
+
+    private fun setObserver() {
         appListVm?.appsListLiveData?.observe(this, androidx.lifecycle.Observer {
             if (it.size > 0) {
                 rvAppList?.layoutManager = LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false)
@@ -33,6 +40,7 @@ class AppListActivity : AppCompatActivity(), AppListAdapter.SelectedApp {
                 rvAppList?.adapter = appListAdapter
                 pBar.visibility = View.GONE
                 rlAppList.visibility = View.VISIBLE
+                appBarLayout.visibility = View.VISIBLE
             }
         })
     }

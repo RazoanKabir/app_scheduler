@@ -26,7 +26,7 @@ class ViewDialog {
            dialog.cancel()
         }
         mDialogOk?.setOnClickListener {
-            DatabaseHandler(activity).deleteSchedule(app)
+            DatabaseHandler(activity).deleteSchedule(app?.id)
             dialog.cancel()
             deletedApp.appDeleted(true)
         }

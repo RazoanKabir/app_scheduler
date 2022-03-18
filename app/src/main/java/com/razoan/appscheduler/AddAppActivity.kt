@@ -153,13 +153,21 @@ class AddAppActivity : AppCompatActivity() {
         }
 
         btnScheduleApp.setOnClickListener {
-           if(app != null) {
+            if(app != null) {
               updateApp()
            } else addApp()
+        }
+
+        ivBack.setOnClickListener {
+            onBackPressed()
         }
     }
 
     private fun updateApp() {
+        if(tvAppName.text.isNullOrEmpty() || tvPackageName.text.isNullOrEmpty()) {
+            UtilClass.showToast(this, getString(R.string.pleaseSelectApp))
+            return
+        }
         val status = DatabaseHandler(this).updateSchedule(
             AppSelectionModel(
                 app?.id,
@@ -180,6 +188,10 @@ class AddAppActivity : AppCompatActivity() {
     }
 
     private fun addApp() {
+        if(tvAppName.text.isNullOrEmpty() || tvPackageName.text.isNullOrEmpty()) {
+            UtilClass.showToast(this, getString(R.string.pleaseSelectApp))
+            return
+        }
         val status = DatabaseHandler(this).addApp(
             AppSelectionModel(
                 0,

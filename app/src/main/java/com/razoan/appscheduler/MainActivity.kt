@@ -1,30 +1,38 @@
 package com.razoan.appscheduler
 import android.content.Intent
 import android.net.Uri
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.provider.Settings
+import android.view.Menu
+import android.view.MenuItem
 import android.view.View
+import androidx.appcompat.app.AppCompatActivity
 import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
 import androidx.recyclerview.widget.LinearLayoutManager
-import com.razoan.appscheduler.adapter.AppListAdapter
 import com.razoan.appscheduler.adapter.ScheduledAppListAdapter
 import com.razoan.appscheduler.handler.DatabaseHandler
 import com.razoan.appscheduler.model.AppSelectionModel
 import com.razoan.appscheduler.util.UtilClass
 import com.razoan.appscheduler.util.ViewDialog
 import kotlinx.android.synthetic.main.activity_main.*
-import kotlinx.android.synthetic.main.activity_main.rlAppList
-import kotlinx.android.synthetic.main.activity_main.rvAppList
 
 class MainActivity : AppCompatActivity(), ViewDialog.DeletedApp {
     private var scheduledAppListAdapter: ScheduledAppListAdapter? = null
+    private var toolbarMenu: Menu? = null
+    private var menuOption: MenuItem? = null
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         installSplashScreen()
         setContentView(R.layout.activity_main)
+        initActionBar()
         checkOverlayPermission()
         initListener()
+    }
+
+    private fun initActionBar() {
+        setSupportActionBar(toolbar)
+        supportActionBar!!.setDisplayHomeAsUpEnabled(false)
+        supportActionBar!!.setDisplayShowHomeEnabled(false)
     }
 
     override fun onResume() {
@@ -57,14 +65,36 @@ class MainActivity : AppCompatActivity(), ViewDialog.DeletedApp {
     }
 
     private fun initListener() {
-        addApp.setOnClickListener {
+        fabNewApp.setOnClickListener {
             UtilClass.goToNextActivity(this, AddAppActivity:: class.java)
         }
         srDashboard.setOnRefreshListener {
             checkOverlayPermission()
             srDashboard.isRefreshing = false
         }
+    }
+    override fun onCreateOptionsMenu(menu: Menu): Boolean {
+        menuInflater.inflate(R.menu.app_scheduler_menu, menu)
+        toolbarMenu = menu
+        menuOption = menu.findItem(R.id.app_scheduler_menu)
+        return true
+    }
 
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        when (item.itemId) {
+            R.id.deleteAll -> {
+
+            }
+
+            R.id.restartAll -> {
+
+            }
+
+            R.id.appHistory -> {
+                UtilClass.goToNextActivity(this, AppHistoryActivity::class.java)
+            }
+        }
+        return true
     }
 
     override fun appDeleted(isDeleted: Boolean) {

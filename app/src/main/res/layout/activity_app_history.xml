@@ -5,15 +5,14 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="#F2F2F2"
-    tools:context=".MainActivity">
+    tools:context=".AppHistoryActivity">
 
     <com.google.android.material.appbar.AppBarLayout
         android:id="@+id/appBarLayout"
-        android:layout_width="match_parent"
+        android:layout_width="wrap_content"
         android:layout_height="?actionBarSize"
         android:layout_marginBottom="@dimen/_10sdp"
         android:background="@color/titleBar"
-        android:paddingStart="@dimen/_16sdp"
         android:visibility="visible">
 
         <androidx.appcompat.widget.Toolbar
@@ -25,17 +24,41 @@
                 android:layout_width="match_parent"
                 android:layout_height="match_parent">
 
-                <TextView
-                    android:id="@+id/tvTitle"
-                    android:layout_width="wrap_content"
+                <ImageView
+                    android:id="@+id/ivBack"
+                    android:layout_width="@dimen/_24sdp"
+                    android:layout_height="@dimen/_24sdp"
+                    android:layout_centerVertical="true"
+                    android:layout_marginEnd="@dimen/_12sdp"
+                    android:contentDescription="@string/addApp"
+                    android:foreground="?attr/selectableItemBackground"
+                    app:srcCompat="@drawable/ic_baseline_arrow_back_24"
+                    tools:ignore="VectorDrawableCompat" />
+
+                <LinearLayout
+                    android:layout_width="match_parent"
                     android:layout_height="match_parent"
+                    android:layout_toEndOf="@id/ivBack"
                     android:gravity="center_vertical"
-                    android:text="@string/appSchedulerTitle"
-                    android:textAlignment="gravity"
-                    android:textColor="@color/white"
-                    android:textSize="@dimen/_16sdp"
-                    android:textStyle="normal" />
+                    android:orientation="vertical"
+                    android:paddingStart="@dimen/_4sdp"
+                    android:paddingTop="@dimen/_4sdp"
+                    android:paddingEnd="@dimen/_15sdp"
+                    android:paddingBottom="@dimen/_4sdp">
+
+                    <TextView
+                        android:id="@+id/tvTitle"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:gravity="center_vertical"
+                        android:text="@string/appSchedulerHistoryTitle"
+                        android:textAlignment="gravity"
+                        android:textColor="@color/white"
+                        android:textSize="@dimen/_16sdp"
+                        android:textStyle="normal" />
+                </LinearLayout>
             </RelativeLayout>
+
         </androidx.appcompat.widget.Toolbar>
     </com.google.android.material.appbar.AppBarLayout>
     <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
@@ -45,14 +68,14 @@
         android:layout_below="@+id/appBarLayout">
 
         <androidx.core.widget.NestedScrollView
-            android:id="@+id/nestedScrollView"
+            android:id="@+id/nestedScrollViewHistory"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:background="@color/white"
             android:orientation="vertical">
 
             <RelativeLayout
-                android:id="@+id/rlAppList"
+                android:id="@+id/rlAppHistoryList"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_below="@+id/appBarLayout"
@@ -60,16 +83,13 @@
                 android:visibility="visible">
 
                 <androidx.recyclerview.widget.RecyclerView
-                    android:id="@+id/rvAppList"
+                    android:id="@+id/rvAppHistoryList"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:paddingStart="@dimen/_3sdp"
                     tools:itemCount="5"
                     tools:listitem="@layout/item_app_list" />
             </RelativeLayout>
-
-
-
         </androidx.core.widget.NestedScrollView>
     </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
     <RelativeLayout
@@ -97,23 +117,6 @@
             android:layout_centerVertical="true"
             android:padding="@dimen/_16sdp"/>
     </RelativeLayout>
-    <com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton
-        android:id="@+id/fabNewApp"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentBottom="true"
-        android:layout_alignParentEnd="true"
-        android:layout_marginStart="@dimen/_22sdp"
-        android:layout_marginEnd="@dimen/_14sdp"
-        android:layout_marginTop="@dimen/_12sdp"
-        android:layout_marginBottom="@dimen/_20sdp"
-        android:text="@string/addNewApp"
-        android:theme="@style/FloatingBtn"
-        android:textColor="@color/white"
-        android:textAlignment="center"
-        android:textSize="@dimen/_13sdp"
-        android:visibility="visible"
-        android:gravity="center_horizontal" />
 
 
 </RelativeLayout>
