@@ -18,14 +18,15 @@ class StartingActivity : AppCompatActivity() {
     private var dialog: Dialog? = null
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_start)
         installSplashScreen()
+        setContentView(R.layout.activity_start)
         checkOverlayPermission()
     }
 
     override fun onResume() {
         super.onResume()
         if (Settings.canDrawOverlays(this)) {
+            if (dialog?.isShowing == true) dialog?.dismiss()
             proceed()
         } else if (dialog?.isShowing == false)
             checkOverlayPermission()
@@ -38,9 +39,8 @@ class StartingActivity : AppCompatActivity() {
     }
 
     private fun proceed() {
-        if (dialog?.isShowing == true)
-            dialog?.dismiss()
         UtilClass.goToNextActivityByClearingHistory(this, MainActivity::class.java)
+        overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out)
     }
 
     private fun showOverlayDialog() {

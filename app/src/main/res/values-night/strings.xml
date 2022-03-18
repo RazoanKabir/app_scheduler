@@ -19,7 +19,7 @@
     <string name="no">No</string>
     <string name="delete_item">Delete this schedule</string>
     <string name="ok">Yes</string>
-    <string name="removeThisApp">Remove this app from the list?</string>
+    <string name="removeThisApp">Remove/cancel this app from the list?</string>
     <string name="appSchedulerHistoryTitle">App History</string>
     <string name="addNewApp">Add App</string>
     <string name="deleteAllSchedule">Delete All Schedules</string>

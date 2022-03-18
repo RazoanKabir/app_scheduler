@@ -13,7 +13,8 @@
         android:layout_height="?actionBarSize"
         android:background="@color/titleBar"
         android:paddingStart="@dimen/_16sdp"
-        android:visibility="visible">
+        android:visibility="visible"
+        tools:ignore="RtlSymmetry">
 
         <androidx.appcompat.widget.Toolbar
             android:id="@+id/toolbar"
@@ -55,6 +56,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_below="@+id/appBarLayout"
+                android:paddingTop="@dimen/_16sdp"
                 android:background="@color/white"
                 android:visibility="visible">
 
@@ -63,11 +65,15 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:paddingStart="@dimen/_3sdp"
+                    tools:ignore="RtlSymmetry"
                     tools:itemCount="5"
                     tools:listitem="@layout/item_app_list" />
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/_60sdp"
+                    android:background="@color/white"
+                    android:layout_below="@+id/rvAppList"/>
             </RelativeLayout>
-
-
 
         </androidx.core.widget.NestedScrollView>
     </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>

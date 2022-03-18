@@ -1,10 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <style name="Theme.CustomSplashScreenTheme" parent="Theme.SplashScreen">
-        <item name="windowSplashScreenBackground">@color/teal_200</item>
-        <item name="windowSplashScreenAnimatedIcon">@drawable/ic_schedule</item>
-        <item name="windowSplashScreenAnimationDuration">900</item>
-        <item name="android:windowSplashScreenBrandingImage">@drawable/ic_schedule</item>
-        <item name="postSplashScreenTheme">@style/Theme.AppCompat.Light.NoActionBar</item>
-    </style>
+    <style name="SplashActivity" parent="Theme.AppCompat.NoActionBar">
+        <!-- Point 3-->
+        <item name="android:windowSplashScreenBackground">#FFFFFF</item>
+        <!-- Point 2-->
+        <item name="android:windowSplashScreenIconBackgroundColor">#000000</item>
+        <!-- Point 1-->
+        <item name="android:windowSplashScreenAnimatedIcon">@drawable/splash_inset</item>
+        <!-- Point 4-->
+        <item name="android:windowSplashScreenBrandingImage">@drawable/splash_inset</item> </style>
 </resources>

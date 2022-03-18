@@ -13,9 +13,12 @@ import com.razoan.appscheduler.util.ViewDialog
 
 
 class MainViewModel : ViewModel() {
-    fun deleteAll(context: Context ,selectedAppList: ArrayList<AppSelectionModel>) {
-        for(i in 0 until selectedAppList.size) {
-            DatabaseHandler(context).deleteSchedule(selectedAppList[i].id)
+    fun deleteAll(context: Context) {
+        val selectedAppList = getAppList(context)
+        if(selectedAppList.size > 0) {
+            for(i in 0 until selectedAppList.size) {
+                DatabaseHandler(context).deleteSchedule(selectedAppList[i].id)
+            }
         }
     }
 

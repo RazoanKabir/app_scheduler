@@ -11,7 +11,7 @@
 
     <com.google.android.material.appbar.AppBarLayout
         android:id="@+id/appBarLayout"
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
         android:background="@color/titleBar"
         android:visibility="visible"
         android:layout_height="?actionBarSize">
@@ -83,38 +83,28 @@
             <RelativeLayout
                 android:id="@+id/rlGoToAppList"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content">
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/_16sdp">
 
-                <androidx.cardview.widget.CardView
-                    android:id="@+id/cvGoToAppList"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    app:cardCornerRadius="@dimen/_5sdp"
-                    android:layout_marginTop="@dimen/_14sdp"
-                    android:layout_marginEnd="@dimen/_16sdp"
+                <ImageView
+                    android:id="@+id/ivAppListIcon"
+                    android:layout_width="@dimen/_30sdp"
+                    android:layout_height="@dimen/_30sdp"
                     android:layout_marginStart="@dimen/_5sdp"
-                    android:backgroundTint="@color/soft_blue"
-                    android:layout_centerVertical="true">
-
-                    <ImageView
-                        android:id="@+id/ivAppListIcon"
-                        android:layout_width="@dimen/_30sdp"
-                        android:layout_height="@dimen/_30sdp"
-                        android:layout_marginStart="@dimen/_5sdp"
-                        android:contentDescription="@string/addApp"
-                        app:srcCompat="@drawable/ic_app_list_add_24"
-                        tools:ignore="ImageContrastCheck" />
-
-                </androidx.cardview.widget.CardView>
+                    android:contentDescription="@string/addApp"
+                    app:srcCompat="@drawable/ic_applist"
+                    tools:ignore="ImageContrastCheck" />
 
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_centerVertical="true"
                     android:text="@string/goToAppList"
-                    android:layout_toEndOf="@+id/cvGoToAppList"
+                    android:paddingStart="@dimen/_20sdp"
+                    android:layout_toEndOf="@+id/ivAppListIcon"
                     android:textColor="@color/text_color_inner"
-                    android:textSize="@dimen/_12sdp" />
+                    android:textSize="@dimen/_12sdp"
+                    tools:ignore="RtlSymmetry" />
 
             </RelativeLayout>
 
@@ -269,9 +259,10 @@
                 android:backgroundTint="@color/bg_tint"
                 android:hint="@string/exampleHint"
                 android:inputType="text"
+                android:paddingTop="@dimen/_10sdp"
                 android:textColor="@color/black_700"
                 android:textColorHint="@color/bg_tint"
-                android:textSize="@dimen/_16sdp"
+                android:textSize="@dimen/_14sdp"
                 android:autofillHints="@string/exampleHint" />
 
         </LinearLayout>
@@ -297,7 +288,7 @@
             android:background="@drawable/footer"
             android:text="@string/scheduleApp"
             android:textColor="@android:color/white"
-            android:textSize="@dimen/_14sdp"
+            android:textSize="@dimen/_12sdp"
             tools:ignore="TextContrastCheck" />
 
     </RelativeLayout>

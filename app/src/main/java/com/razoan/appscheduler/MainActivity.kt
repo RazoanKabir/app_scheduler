@@ -76,7 +76,7 @@ class MainActivity : AppCompatActivity(), ViewDialog.DeletedApp {
     }
 
     private fun deleteAllSchedules() {
-        if (selectedAppList.size > 0) mainVM?.deleteAll(this, selectedAppList)
+        mainVM?.deleteAll(this)
         updateUI()
     }
 
