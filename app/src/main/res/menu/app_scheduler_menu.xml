@@ -18,11 +18,6 @@
                 android:visible="true" />
 
             <item
-                android:id="@+id/restartAll"
-                android:title="@string/restartAllSchedule"
-                android:visible="true" />
-
-            <item
                 android:id="@+id/appHistory"
                 android:title="@string/appSchedulerHistoryTitle"
                 android:visible="true" />
