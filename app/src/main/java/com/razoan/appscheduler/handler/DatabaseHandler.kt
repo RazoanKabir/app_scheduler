@@ -7,9 +7,23 @@ import android.content.ContentValues
 import android.content.Context
 import android.content.Intent
 import android.database.Cursor
+import android.database.SQLException
 import android.database.sqlite.SQLiteDatabase
 import android.database.sqlite.SQLiteException
-import android.database.sqlite.SQLiteOpenHelper
+import com.razoan.appscheduler.handler.DataBaseBaseClass.Companion.KEY_DATE_TIME
+import com.razoan.appscheduler.handler.DataBaseBaseClass.Companion.KEY_DAY
+import com.razoan.appscheduler.handler.DataBaseBaseClass.Companion.KEY_HOUR
+import com.razoan.appscheduler.handler.DataBaseBaseClass.Companion.KEY_ID
+import com.razoan.appscheduler.handler.DataBaseBaseClass.Companion.KEY_IS_EXECUTED
+import com.razoan.appscheduler.handler.DataBaseBaseClass.Companion.KEY_IS_REPEATABLE
+import com.razoan.appscheduler.handler.DataBaseBaseClass.Companion.KEY_MINUTE
+import com.razoan.appscheduler.handler.DataBaseBaseClass.Companion.KEY_MONTH
+import com.razoan.appscheduler.handler.DataBaseBaseClass.Companion.KEY_NAME
+import com.razoan.appscheduler.handler.DataBaseBaseClass.Companion.KEY_NOTE
+import com.razoan.appscheduler.handler.DataBaseBaseClass.Companion.KEY_PACKAGE_NAME
+import com.razoan.appscheduler.handler.DataBaseBaseClass.Companion.KEY_YEAR
+import com.razoan.appscheduler.handler.DataBaseBaseClass.Companion.TABLE_SCHEDULER
+import com.razoan.appscheduler.handler.DataBaseBaseClass.Companion.TABLE_SCHEDULER_HISTORY
 import com.razoan.appscheduler.model.AppSelectionModel
 import com.razoan.appscheduler.util.Constants
 import com.razoan.appscheduler.util.OpenAppReceiver
@@ -17,72 +31,32 @@ import kotlinx.serialization.json.Json
 import java.util.*
 import kotlin.collections.ArrayList
 
-class DatabaseHandler(context: Context) :
-    SQLiteOpenHelper(context, DATABASE_NAME, null, DATABASE_VERSION) {
-    companion object {
-        private var DATABASE_VERSION = 1
-        private var DATABASE_NAME = "AppSchedulerDB"
-        private var TABLE_SCHEDULER = "AppSchedulerTable"
-        private var TABLE_SCHEDULER_HISTORY = "AppSchedulerHistoryTable"
-        private var KEY_ID = "_id"
-        private var KEY_NAME = "app_name"
-        private var KEY_PACKAGE_NAME = "package_name"
-        private var KEY_NOTE = "note"
-        private var KEY_DATE_TIME = "date_time"
-        private var KEY_YEAR = "year"
-        private var KEY_MONTH = "month"
-        private var KEY_DAY = "day"
-        private var KEY_HOUR = "hour"
-        private var KEY_MINUTE = "minute"
-        private var KEY_IS_REPEATABLE = "is_repeatable"
-        private var KEY_IS_EXECUTED = "is_executed"
+class DatabaseHandler(context: Context) {
+
+    private var mDatabase: SQLiteDatabase? = null
+    private var mDbHelper: DataBaseBaseClass? = DataBaseBaseClass(context)
+
+    @Throws(SQLException::class)
+    fun openWritable(): SQLiteDatabase? {
+        mDatabase = mDbHelper?.writableDatabase
+        return mDatabase
     }
 
-    override fun onCreate(db: SQLiteDatabase?) {
-        val CREATE_APP_SCHEDULER_TABLE = ("CREATE TABLE " + TABLE_SCHEDULER + "("
-                + KEY_ID + " INTEGER PRIMARY KEY AUTOINCREMENT,"
-                + KEY_NAME + " TEXT,"
-                + KEY_PACKAGE_NAME + " TEXT,"
-                + KEY_NOTE + " TEXT,"
-                + KEY_DATE_TIME + " TEXT,"
-                + KEY_YEAR + " TEXT,"
-                + KEY_MONTH + " TEXT,"
-                + KEY_DAY + " TEXT,"
-                + KEY_HOUR + " TEXT,"
-                + KEY_MINUTE + " TEXT,"
-                + KEY_IS_REPEATABLE + " TEXT,"
-                + KEY_IS_EXECUTED + " TEXT"
-                + ")")
-        db?.execSQL(CREATE_APP_SCHEDULER_TABLE)
-
-        val CREATE_APP_SCHEDULER_HISTORY_TABLE = ("CREATE TABLE " + TABLE_SCHEDULER_HISTORY + "("
-                + KEY_ID + " INTEGER PRIMARY KEY AUTOINCREMENT,"
-                + KEY_NAME + " TEXT,"
-                + KEY_PACKAGE_NAME + " TEXT,"
-                + KEY_NOTE + " TEXT,"
-                + KEY_DATE_TIME + " TEXT,"
-                + KEY_YEAR + " TEXT,"
-                + KEY_MONTH + " TEXT,"
-                + KEY_DAY + " TEXT,"
-                + KEY_HOUR + " TEXT,"
-                + KEY_MINUTE + " TEXT,"
-                + KEY_IS_REPEATABLE + " TEXT,"
-                + KEY_IS_EXECUTED + " TEXT"
-                + ")")
-        db?.execSQL(CREATE_APP_SCHEDULER_HISTORY_TABLE)
+    @Throws(SQLException::class)
+    fun openReadable(): SQLiteDatabase? {
+        mDatabase = mDbHelper?.readableDatabase
+        return mDatabase
     }
 
-    override fun onUpgrade(db: SQLiteDatabase?, oldVersion: Int, newVersion: Int) {
-        db!!.execSQL("DROP TABLE IF EXISTS $TABLE_SCHEDULER")
-        db.execSQL("DROP TABLE IF EXISTS $TABLE_SCHEDULER_HISTORY")
-        onCreate(db)
+    fun close() {
+        mDbHelper?.close()
     }
 
-    fun addApp(app: AppSelectionModel): Long {
-        val db = this.writableDatabase
+    fun addApp(app: AppSelectionModel): Long? {
+        val db = openWritable()
         val contentValues = getContentValues(app)
-        val success = db.insert(TABLE_SCHEDULER, null, contentValues)
-        db.close()
+        val success = db?.insert(TABLE_SCHEDULER, null, contentValues)
+        db?.close()
         return success
     }
 
@@ -91,28 +65,36 @@ class DatabaseHandler(context: Context) :
         return getList(selectQuery)
     }
 
-    fun updateSchedule(app: AppSelectionModel): Int {
-        val db = this.writableDatabase
+    fun updateSchedule(app: AppSelectionModel): Int? {
+        val db = openWritable()
         val contentValues = getContentValues(app)
-        val success = db.update(TABLE_SCHEDULER, contentValues, KEY_ID + "=" + app.id, null)
-        db.close()
+        val success = db?.update(TABLE_SCHEDULER, contentValues, KEY_ID + "=" + app.id, null)
+        db?.close()
         return success
     }
 
-    fun deleteSchedule(id: Int?): Int {
-        val db = this.writableDatabase
-        val contentValues = ContentValues()
-        contentValues.put(KEY_ID, id)
-        val success = db.delete(TABLE_SCHEDULER, "$KEY_ID=$id", null)
-        db.close()
+    fun deleteSchedule(id: Int?): Int? {
+        val db = openWritable()
+        val success = db?.delete(TABLE_SCHEDULER, "$KEY_ID=$id", null)
+        db?.close()
         return success
     }
 
-    fun addAppHistory(app: AppSelectionModel): Long {
-        val db = this.writableDatabase
+    fun deleteAll(apps: ArrayList<AppSelectionModel>?): Int? {
+        val db = openWritable()
+        var success: Int? = -1
+        for(i in 0 until apps?.size!!) {
+          success = db?.delete(TABLE_SCHEDULER, "$KEY_ID=${apps[i].id}", null)
+        }
+        db?.close()
+        return success
+    }
+
+    fun addAppHistory(app: AppSelectionModel): Long? {
+        val db = openWritable()
         val contentValues = getContentValues(app)
-        val success = db.insert(TABLE_SCHEDULER_HISTORY, null, contentValues)
-        db.close()
+        val success = db?.insert(TABLE_SCHEDULER_HISTORY, null, contentValues)
+        db?.close()
         return success
     }
 
@@ -161,12 +143,12 @@ class DatabaseHandler(context: Context) :
     private fun getList(selectQuery: String): ArrayList<AppSelectionModel> {
         val app = ArrayList<AppSelectionModel>()
         var cursor: Cursor? = null
-        val db = this.readableDatabase
+        val db = openReadable()
         try {
-            cursor = db.rawQuery(selectQuery, null)
+            cursor = db?.rawQuery(selectQuery, null)
 
         } catch (e: SQLiteException) {
-            db.execSQL(selectQuery)
+            db?.execSQL(selectQuery)
         }
 
         var id: Int
@@ -215,7 +197,7 @@ class DatabaseHandler(context: Context) :
 
             } while (cursor.moveToNext())
         }
-
+        cursor?.close()
         return app
 
     }

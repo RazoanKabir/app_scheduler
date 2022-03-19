@@ -45,10 +45,14 @@ class OpenAppReceiver : BroadcastReceiver() {
                 "1"
             )
         )
-        if (status > -1) {
-            status = DatabaseHandler(context).deleteSchedule(app.id).toLong()
-            if (status > -1)
-                DatabaseHandler(context).setLatestScheduledApp(context)
+        if (status != null) {
+            if (status > -1) {
+                status = DatabaseHandler(context).deleteSchedule(app.id)?.toLong()
+                if (status != null) {
+                    if (status > -1)
+                        DatabaseHandler(context).setLatestScheduledApp(context)
+                }
+            }
         }
 
     }

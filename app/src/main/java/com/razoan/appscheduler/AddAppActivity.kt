@@ -122,7 +122,7 @@ class AddAppActivity : AppCompatActivity() {
         }
 
         val dateSetListener =
-            DatePickerDialog.OnDateSetListener { view, year, monthOfYear, dayOfMonth ->
+            DatePickerDialog.OnDateSetListener { _, year, monthOfYear, dayOfMonth ->
                 cal.set(Calendar.YEAR, year)
                 cal.set(Calendar.MONTH, monthOfYear)
                 cal.set(Calendar.DAY_OF_MONTH, dayOfMonth)
@@ -187,7 +187,9 @@ class AddAppActivity : AppCompatActivity() {
                 "0"
             )
         )
-        updateStatus(status)
+        if (status != null) {
+            updateStatus(status)
+        }
     }
 
     private fun addApp() {
@@ -211,7 +213,9 @@ class AddAppActivity : AppCompatActivity() {
                 "0"
             )
         )
-        updateStatus(status)
+        if (status != null) {
+            updateStatus(status)
+        }
     }
 
     private fun updateStatus(status: Long) {

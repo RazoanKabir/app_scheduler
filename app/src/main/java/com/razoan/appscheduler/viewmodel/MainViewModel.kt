@@ -11,7 +11,6 @@ import com.razoan.appscheduler.handler.DatabaseHandler
 import com.razoan.appscheduler.model.AppSelectionModel
 import com.razoan.appscheduler.util.ViewDialog
 
-
 class MainViewModel : ViewModel() {
     fun deleteAll(context: Context) {
         val selectedAppList = getAppList(context)

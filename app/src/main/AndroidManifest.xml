@@ -26,7 +26,8 @@
         </activity>
         <activity android:name=".AddAppActivity"
             android:theme="@style/Theme.AppScheduler"
-            android:screenOrientation="fullSensor"/>
+            android:screenOrientation="fullSensor"
+            android:windowSoftInputMode="adjustResize"/>
         <activity android:name=".MainActivity"
             android:theme="@style/Theme.AppScheduler"
             android:screenOrientation="fullSensor"/>
@@ -34,7 +35,6 @@
             android:theme="@style/Theme.AppScheduler"
             android:screenOrientation="fullSensor"
             android:windowSoftInputMode="stateAlwaysHidden"/>
-
         <activity android:name=".AppHistoryActivity"
             android:theme="@style/Theme.AppScheduler"
             android:screenOrientation="fullSensor"
@@ -55,7 +55,4 @@
             <action android:name="android.intent.action.MAIN" />
         </intent>
     </queries>
-
-
-
 </manifest>
