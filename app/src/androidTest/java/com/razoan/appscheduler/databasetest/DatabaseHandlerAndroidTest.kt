@@ -1,4 +1,5 @@
 package com.razoan.appscheduler.databasetest
+
 import android.content.Context
 import androidx.arch.core.executor.testing.InstantTaskExecutorRule
 import androidx.test.core.app.ApplicationProvider
@@ -114,8 +115,8 @@ class DatabaseHandlerAndroidTest {
     @Test
     fun testDeleteOnlyOne() {
         var apps: ArrayList<AppSelectionModel>? = mDataSource?.viewScheduledApp()
-        if(apps?.size!! > 0) {
-            mDataSource?.deleteSchedule(apps.get(apps.size-1).id)
+        if (apps?.size!! > 0) {
+            mDataSource?.deleteSchedule(apps.get(apps.size - 1).id)
             apps = mDataSource?.viewScheduledApp()
         }
         assertThat(apps?.size).isEqualTo(0)
@@ -159,9 +160,9 @@ class DatabaseHandlerAndroidTest {
             )
         )
         var apps = mDataSource?.viewScheduledApp()
-        mDataSource?.deleteSchedule(apps?.get(apps.size-1)?.id)
+        mDataSource?.deleteSchedule(apps?.get(apps.size - 1)?.id)
         apps = mDataSource?.viewScheduledApp()
-        mDataSource?.deleteSchedule(apps?.get(apps.size-1)?.id)
+        mDataSource?.deleteSchedule(apps?.get(apps.size - 1)?.id)
 
         apps = mDataSource?.viewScheduledApp()
         assertThat(apps?.size).isEqualTo(0)
@@ -188,7 +189,7 @@ class DatabaseHandlerAndroidTest {
         val appsSizeStart = mDataSource?.viewScheduledApp()
         mDataSource?.updateSchedule(
             AppSelectionModel(
-                appsSizeStart?.get(appsSizeStart.size-1)?.id,
+                appsSizeStart?.get(appsSizeStart.size - 1)?.id,
                 "YouTube",
                 "com.google.android.youtube",
                 "Testing Update YouTube App",
@@ -203,7 +204,7 @@ class DatabaseHandlerAndroidTest {
             )
         )
         val apps = mDataSource?.viewScheduledApp()
-        assertThat(apps?.get(apps.size-1)?.appName).isEqualTo("YouTube")
+        assertThat(apps?.get(apps.size - 1)?.appName).isEqualTo("YouTube")
     }
 }
 
