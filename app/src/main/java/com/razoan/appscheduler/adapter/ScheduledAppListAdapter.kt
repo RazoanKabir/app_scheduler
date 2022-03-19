@@ -10,7 +10,7 @@ import android.widget.ImageView
 import android.widget.LinearLayout
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
-import com.razoan.appscheduler.AddAppActivity
+import com.razoan.appscheduler.view.AddAppActivity
 import com.razoan.appscheduler.R
 import com.razoan.appscheduler.model.AppSelectionModel
 import com.razoan.appscheduler.util.Constants

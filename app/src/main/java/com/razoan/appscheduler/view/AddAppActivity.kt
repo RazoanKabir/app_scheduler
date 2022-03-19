@@ -1,4 +1,4 @@
-package com.razoan.appscheduler
+package com.razoan.appscheduler.view
 
 import android.annotation.SuppressLint
 import android.app.DatePickerDialog
@@ -10,6 +10,7 @@ import android.view.View
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.res.ResourcesCompat
 import com.google.gson.Gson
+import com.razoan.appscheduler.R
 import com.razoan.appscheduler.handler.DatabaseHandler
 import com.razoan.appscheduler.model.AppSelectionModel
 import com.razoan.appscheduler.util.Constants

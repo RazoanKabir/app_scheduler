@@ -1,4 +1,4 @@
-package com.razoan.appscheduler
+package com.razoan.appscheduler.view
 
 import android.app.Dialog
 import android.content.Intent
@@ -12,6 +12,7 @@ import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
 import com.google.android.material.floatingactionbutton.FloatingActionButton
+import com.razoan.appscheduler.R
 import com.razoan.appscheduler.util.UtilClass
 
 class StartingActivity : AppCompatActivity() {

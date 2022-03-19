@@ -18,7 +18,7 @@
         android:theme="@style/Theme.AppScheduler"
         android:fullBackupContent="true">
         <activity
-            android:name=".StartingActivity"
+            android:name=".view.StartingActivity"
             android:theme="@style/Theme.CustomSplashScreenTheme"
             android:exported="true">
             <intent-filter>
@@ -26,18 +26,18 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".AddAppActivity"
+        <activity android:name=".view.AddAppActivity"
             android:theme="@style/Theme.AppScheduler"
             android:screenOrientation="fullSensor"
             android:windowSoftInputMode="adjustResize"/>
-        <activity android:name=".MainActivity"
+        <activity android:name=".view.MainActivity"
             android:theme="@style/Theme.AppScheduler"
             android:screenOrientation="fullSensor"/>
-        <activity android:name=".AppListActivity"
+        <activity android:name=".view.AppListActivity"
             android:theme="@style/Theme.AppScheduler"
             android:screenOrientation="fullSensor"
             android:windowSoftInputMode="stateAlwaysHidden"/>
-        <activity android:name=".AppHistoryActivity"
+        <activity android:name=".view.AppHistoryActivity"
             android:theme="@style/Theme.AppScheduler"
             android:screenOrientation="fullSensor"
             android:windowSoftInputMode="stateAlwaysHidden"/>

@@ -1,10 +1,11 @@
-package com.razoan.appscheduler
+package com.razoan.appscheduler.view
 
 import android.os.Bundle
 import android.view.View
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.razoan.appscheduler.R
 import com.razoan.appscheduler.adapter.AppListAdapter
 import com.razoan.appscheduler.model.PackageAppInfo
 import com.razoan.appscheduler.util.Constants
