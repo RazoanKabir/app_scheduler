@@ -147,13 +147,6 @@ class DatabaseHandler(context: Context) {
                 calendar.timeInMillis,
                 alarmIntent
             )
-
-            /*alarmMgr.setRepeating(
-                    AlarmManager.RTC_WAKEUP,
-                    calendar.timeInMillis,
-                    1000 * 60 * 60 * 24,
-                    alarmIntent
-                )*/
         }
     }
 

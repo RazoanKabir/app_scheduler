@@ -2,6 +2,11 @@ package com.razoan.appscheduler.viewmodel
 
 import android.annotation.SuppressLint
 import android.content.Context
+import android.content.Context.POWER_SERVICE
+import android.content.Intent
+import android.net.Uri
+import android.os.PowerManager
+import android.provider.Settings
 import android.view.View
 import android.widget.RelativeLayout
 import androidx.lifecycle.ViewModel
@@ -13,21 +18,6 @@ import com.razoan.appscheduler.handler.DatabaseHandler
 import com.razoan.appscheduler.model.AppSelectionModel
 import com.razoan.appscheduler.util.UtilClass
 import com.razoan.appscheduler.util.ViewDialog
-import androidx.core.content.ContextCompat.startActivity
-
-import android.content.Context.POWER_SERVICE
-
-import androidx.core.content.ContextCompat.getSystemService
-
-import android.os.PowerManager
-
-import android.content.Intent
-import android.net.Uri
-
-import android.os.Build
-import android.provider.Settings
-import androidx.core.content.ContextCompat
-
 
 class MainViewModel : ViewModel() {
     fun deleteAll(context: Context) {
