@@ -231,5 +231,13 @@ class DatabaseHandlerAndroidTest {
         val appsHistorySize = mDataSource?.viewScheduledAppHistory()
         assertThat(appsHistorySizeStart?.size!! < appsHistorySize?.size!!)
     }
+
+    @Test
+    fun testAndroidDeleteAllHistory() {
+        var apps = mDataSource?.viewScheduledAppHistory()
+        mDataSource?.deleteAllHistory(apps)
+        apps = mDataSource?.viewScheduledAppHistory()
+        assertThat(apps?.size).isEqualTo(0)
+    }
 }
 
