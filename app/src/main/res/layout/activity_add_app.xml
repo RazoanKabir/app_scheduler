@@ -22,16 +22,17 @@
             <RelativeLayout
                 android:layout_width="match_parent"
                 android:layout_height="match_parent">
+
                 <ImageView
                     android:id="@+id/ivBack"
                     android:layout_width="@dimen/_24sdp"
                     android:layout_height="@dimen/_24sdp"
                     android:layout_centerVertical="true"
                     android:layout_marginEnd="@dimen/_12sdp"
+                    android:contentDescription="@string/addApp"
                     android:foreground="?attr/selectableItemBackground"
                     app:srcCompat="@drawable/ic_baseline_arrow_back_24"
-                    tools:ignore="VectorDrawableCompat"
-                    android:contentDescription="@string/addApp" />
+                    tools:ignore="VectorDrawableCompat" />
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
@@ -84,7 +85,9 @@
                 android:id="@+id/rlGoToAppList"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="@dimen/_16sdp">
+                android:paddingTop="@dimen/_8sdp"
+                android:paddingBottom="@dimen/_8sdp"
+                android:foreground="?attr/selectableItemBackground">
 
                 <ImageView
                     android:id="@+id/ivAppListIcon"
