@@ -9,7 +9,7 @@ import com.razoan.appscheduler.handler.DatabaseHandler
 import com.razoan.appscheduler.model.AppSelectionModel
 import kotlinx.android.synthetic.main.activity_app_history.*
 
-class AppHistoryActivity : AppCompatActivity() {
+class AppHistoryActivity : AppCompatActivity(), AppHistoryListAdapter.Deleted {
     private var appHistoryListAdapter: AppHistoryListAdapter? = null
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -37,12 +37,16 @@ class AppHistoryActivity : AppCompatActivity() {
                 LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false)
             rvAppHistoryList?.setHasFixedSize(true)
             rvAppHistoryList?.isNestedScrollingEnabled = false
-            appHistoryListAdapter = AppHistoryListAdapter(selectedAppList)
+            appHistoryListAdapter = AppHistoryListAdapter(selectedAppList, this)
             rvAppHistoryList?.adapter = appHistoryListAdapter
             rvAppHistoryList.visibility = View.VISIBLE
         } else {
             rvAppHistoryList.visibility = View.GONE
             rlEmptyView.visibility = View.VISIBLE
         }
+    }
+
+    override fun deleted(isDeleted: Boolean) {
+        if(isDeleted) initView()
     }
 }

@@ -6,18 +6,28 @@ import android.widget.RelativeLayout
 import androidx.lifecycle.ViewModel
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.razoan.appscheduler.R
 import com.razoan.appscheduler.adapter.ScheduledAppListAdapter
 import com.razoan.appscheduler.handler.DatabaseHandler
 import com.razoan.appscheduler.model.AppSelectionModel
+import com.razoan.appscheduler.util.UtilClass
 import com.razoan.appscheduler.util.ViewDialog
 
 class MainViewModel : ViewModel() {
     fun deleteAll(context: Context) {
         val selectedAppList = getAppList(context)
-        if(selectedAppList.size > 0) {
-            for(i in 0 until selectedAppList.size) {
-                DatabaseHandler(context).deleteSchedule(selectedAppList[i].id)
-            }
+        DatabaseHandler(context).deleteAll(selectedAppList)
+    }
+
+    fun deleteAllHistory(context: Context) {
+        val appListHistory = DatabaseHandler(context).viewScheduledAppHistory()
+        if(appListHistory.size==0) {
+            UtilClass.showToast(context, context.getString(R.string.noHistoryFound))
+            return
+        }
+        val status = DatabaseHandler(context).deleteAllHistory(appListHistory)
+        if (status != null) {
+            if(status > -1) UtilClass.showToast(context, context.getString(R.string.successfullyDeletedAllHistory))
         }
     }
 

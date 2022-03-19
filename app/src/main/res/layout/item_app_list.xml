@@ -63,6 +63,23 @@
             android:visibility="gone"/>
     </LinearLayout>
     <LinearLayout
+        android:id="@+id/llDelete"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:layout_alignParentEnd="true"
+        android:layout_centerVertical="true"
+        android:visibility="gone">
+
+        <ImageView
+            android:id="@+id/ivDeleteOnly"
+            android:layout_width="@dimen/_35sdp"
+            android:layout_height="@dimen/_35sdp"
+            android:padding="@dimen/_10sdp"
+            app:srcCompat="@drawable/ic_baseline_delete_forever_24"
+            android:contentDescription="@string/addApp" />
+    </LinearLayout>
+    <LinearLayout
         android:id="@+id/llEditAndDelete"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"

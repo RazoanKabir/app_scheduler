@@ -107,11 +107,11 @@
             android:layout_centerVertical="true"
             app:srcCompat="@drawable/ic_empty"
             tools:ignore="VectorDrawableCompat"
-            android:contentDescription="@string/emptyListHome" />
+            android:contentDescription="@string/emptyListHistory" />
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="@string/emptyListHome"
+            android:text="@string/emptyListHistory"
             android:gravity="center"
             android:layout_below="@+id/ivEmpty"
             android:layout_centerHorizontal="true"

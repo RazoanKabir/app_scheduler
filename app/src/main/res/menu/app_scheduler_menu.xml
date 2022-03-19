@@ -11,13 +11,18 @@
         app:showAsAction="always">
         <menu>
             <item
+                android:id="@+id/appHistory"
+                android:title="@string/appSchedulerHistoryTitle"
+                android:visible="true" />
+            <item
                 android:id="@+id/deleteAll"
                 android:title="@string/deleteAllSchedule"
                 android:visible="true" />
             <item
-                android:id="@+id/appHistory"
-                android:title="@string/appSchedulerHistoryTitle"
+                android:id="@+id/appHistoryDeleteAll"
+                android:title="@string/appSchedulerHistoryDelete"
                 android:visible="true" />
+
         </menu>
     </item>
 </menu>

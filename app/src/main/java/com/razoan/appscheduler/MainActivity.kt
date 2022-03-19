@@ -69,8 +69,16 @@ class MainActivity : AppCompatActivity(), ViewDialog.DeletedApp {
             R.id.appHistory -> {
                 UtilClass.goToNextActivity(this, AppHistoryActivity::class.java)
             }
+
+            R.id.appHistoryDeleteAll -> {
+                deleteAllHistory()
+            }
         }
         return true
+    }
+
+    private fun deleteAllHistory() {
+        mainVM?.deleteAllHistory(this)
     }
 
     private fun deleteAllSchedules() {

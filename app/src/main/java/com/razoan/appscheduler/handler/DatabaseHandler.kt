@@ -103,6 +103,24 @@ class DatabaseHandler(context: Context) {
         return getList(selectQuery)
     }
 
+    fun deleteHistory(id: Int?): Int? {
+        val db = openWritable()
+        var success: Int? = -1
+        success = db?.delete(TABLE_SCHEDULER_HISTORY, "$KEY_ID=${id}", null)
+        db?.close()
+        return success
+    }
+
+    fun deleteAllHistory(apps: ArrayList<AppSelectionModel>?): Int? {
+        val db = openWritable()
+        var success: Int? = -1
+        for(i in 0 until apps?.size!!) {
+            success = db?.delete(TABLE_SCHEDULER_HISTORY, "$KEY_ID=${apps[i].id}", null)
+        }
+        db?.close()
+        return success
+    }
+
     fun setLatestScheduledApp(context: Context) {
         val selectQuery =
             "SELECT  * FROM $TABLE_SCHEDULER WHERE $KEY_IS_EXECUTED = '0' ORDER BY $KEY_DATE_TIME ASC LIMIT 1"

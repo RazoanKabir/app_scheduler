@@ -6,13 +6,18 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
+import android.widget.LinearLayout
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.razoan.appscheduler.R
+import com.razoan.appscheduler.handler.DatabaseHandler
 import com.razoan.appscheduler.model.AppSelectionModel
 
-class AppHistoryListAdapter(var apps: ArrayList<AppSelectionModel>) :
-    RecyclerView.Adapter<AppHistoryListAdapter.ParentViewHolder>() {
+class AppHistoryListAdapter(var apps: ArrayList<AppSelectionModel>, private var isDeleted: Deleted) : RecyclerView.Adapter<AppHistoryListAdapter.ParentViewHolder>() {
+
+    interface Deleted {
+        fun deleted(isDeleted:Boolean)
+    }
 
     private lateinit var context: Context
     private var activity: Activity? = null
@@ -36,9 +41,16 @@ class AppHistoryListAdapter(var apps: ArrayList<AppSelectionModel>) :
         holder.tvPackageNameOfApp?.text = apps[position].appPackageName
         holder.tvPackageSelectionDate?.text = apps[position].dateTime
         holder.tvPackageSelectionDate?.visibility = View.VISIBLE
+        holder.llDelete?.visibility = View.VISIBLE
         if (!apps[position].note.isNullOrEmpty()) {
             holder.tvNote?.text = apps[position].note
             holder.tvNote?.visibility = View.VISIBLE
+        }
+        holder.ivDeleteOnly?.setOnClickListener {
+           val status = DatabaseHandler(context).deleteHistory(apps[position].id)
+            if (status != null) {
+                if(status > -1) isDeleted.deleted(true)
+            }
         }
     }
 
@@ -46,8 +58,9 @@ class AppHistoryListAdapter(var apps: ArrayList<AppSelectionModel>) :
         val ivIcon: ImageView? = itemView.findViewById<ImageView>(R.id.ivSelectedAppIcon)
         val tvNameOfApp: TextView? = itemView.findViewById<TextView>(R.id.tvNameOfApp)
         val tvPackageNameOfApp: TextView? = itemView.findViewById<TextView>(R.id.tvPackageNameOfApp)
-        val tvPackageSelectionDate: TextView? =
-            itemView.findViewById<TextView>(R.id.tvPackageSelectionDate)
+        val tvPackageSelectionDate: TextView? = itemView.findViewById<TextView>(R.id.tvPackageSelectionDate)
         val tvNote: TextView? = itemView.findViewById<TextView>(R.id.tvNote)
+        val ivDeleteOnly: ImageView? = itemView.findViewById<ImageView>(R.id.ivDeleteOnly)
+        val llDelete: LinearLayout? = itemView.findViewById<LinearLayout>(R.id.llDelete)
     }
 }
