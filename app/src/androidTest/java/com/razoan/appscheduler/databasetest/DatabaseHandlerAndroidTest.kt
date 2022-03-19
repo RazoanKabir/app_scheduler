@@ -38,6 +38,8 @@ class DatabaseHandlerAndroidTest {
     @Test
     @Throws(Exception::class)
     fun testAndroidAddAppTwoToList() {
+        var apps: ArrayList<AppSelectionModel>? = mDataSource?.viewScheduledApp()
+        mDataSource?.deleteAll(apps)
         mDataSource?.addApp(
             AppSelectionModel(
                 0,
@@ -70,7 +72,7 @@ class DatabaseHandlerAndroidTest {
                 "0"
             )
         )
-        val apps: ArrayList<AppSelectionModel>? = mDataSource?.viewScheduledApp()
+        apps = mDataSource?.viewScheduledApp()
         assertThat(apps?.size).isEqualTo(2)
         assertThat(apps?.get(0)?.appName).isEqualTo("Pathao")
         assertThat(apps?.get(0)?.appPackageName).isEqualTo("com.pathao.user")
@@ -163,6 +165,45 @@ class DatabaseHandlerAndroidTest {
 
         apps = mDataSource?.viewScheduledApp()
         assertThat(apps?.size).isEqualTo(0)
+    }
+
+    @Test
+    fun testAndroidUpdate() {
+        mDataSource?.addApp(
+            AppSelectionModel(
+                0,
+                "Pathao",
+                "com.pathao.user",
+                "Testing add Pathao App for scheduling",
+                "19/03/2022 4:12 pm",
+                "2022",
+                "3",
+                "19",
+                "16",
+                "12",
+                "0",
+                "0"
+            )
+        )
+        val appsSizeStart = mDataSource?.viewScheduledApp()
+        mDataSource?.updateSchedule(
+            AppSelectionModel(
+                appsSizeStart?.get(appsSizeStart.size-1)?.id,
+                "YouTube",
+                "com.google.android.youtube",
+                "Testing Update YouTube App",
+                "19/03/2022 4:20 pm",
+                "2022",
+                "3",
+                "19",
+                "16",
+                "20",
+                "0",
+                "0"
+            )
+        )
+        val apps = mDataSource?.viewScheduledApp()
+        assertThat(apps?.get(apps.size-1)?.appName).isEqualTo("YouTube")
     }
 }
 
