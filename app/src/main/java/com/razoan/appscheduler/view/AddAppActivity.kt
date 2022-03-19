@@ -15,10 +15,11 @@ import com.razoan.appscheduler.handler.dbhandler.DatabaseHandler
 import com.razoan.appscheduler.model.AppSelectionModel
 import com.razoan.appscheduler.util.Constants
 import com.razoan.appscheduler.util.UtilClass
+import com.razoan.appscheduler.util.UtilClass.Companion.getDate
+import com.razoan.appscheduler.util.UtilClass.Companion.getTime
 import kotlinx.android.synthetic.main.activity_add_app.*
 import java.text.SimpleDateFormat
 import java.util.*
-import java.text.DateFormat
 
 class AddAppActivity : AppCompatActivity() {
     private var appName: String? = null
@@ -78,62 +79,6 @@ class AddAppActivity : AppCompatActivity() {
             )
                 from = intent.getStringExtra(Constants.from)
         }
-    }
-
-    private fun setAppInfoFromSelection(appName: String?, appPackageName: String?) {
-        rlGoToAppList.visibility = View.GONE
-        try {
-            appIcon = this.packageManager.getApplicationIcon(appPackageName.toString())
-            ivSelectedAppIcon.setImageDrawable(appIcon)
-        } catch (e: PackageManager.NameNotFoundException) {
-            e.printStackTrace()
-        }
-        tvAppName.text = appName
-        tvPackageName.text = appPackageName
-        ivScheduleIconStatus.setImageDrawable(
-            ResourcesCompat.getDrawable(
-                resources,
-                R.drawable.ic_baseline_alarm_on_24,
-                null
-            )
-        )
-        rlSelectApp.visibility = View.VISIBLE
-    }
-
-    @SuppressLint("SimpleDateFormat", "SetTextI18n")
-    private fun setAppInfoForEdit(app: AppSelectionModel?) {
-        setAppInfoFromSelection(app?.appName, app?.appPackageName)
-
-        val inputFormat: DateFormat = SimpleDateFormat("dd/MM/yyyy hh:mm:ss aa", Locale.US)
-        val date: Date = inputFormat.parse(app?.dateTime)
-        val setD = SimpleDateFormat("dd/MM/yyyy", Locale.US).format(date)
-
-        val inputFormatTime: DateFormat = SimpleDateFormat("dd/MM/yyyy hh:mm:ss aa", Locale.US)
-        val time: Date = inputFormatTime.parse(app?.dateTime)
-        val setT = SimpleDateFormat("hh:mm:ss aa", Locale.US).format(time)
-
-        tvTime.text = setT
-        tvDate.text = setD
-        /*val aa = if (app?.hour?.toInt()!! > 11) ("pm") else ("am")
-        val hour = if (app.hour.toInt() > 12)
-            (app.hour.toInt() - 12)
-        else if (app.hour.toInt() == 0)
-            (app.hour.toInt() + 12)
-        else
-            (app.hour)
-        val min = if (app.minute?.toInt()!! < 10) "0${app.minute}" else app.minute
-
-        val month = app.month?.toInt()?.plus(1)
-        tvDate.text = "${app.day}/${month}/${app.year}"
-        tvTime.text = "${hour}:${min} $aa"*/
-        val month = app?.month?.toInt()?.plus(1)
-        yearSelected = app?.year?.toInt()
-        monthSelected = month
-        daySelected = app?.day?.toInt()
-        hourSelected = app?.hour?.toInt()
-        minSelected = app?.minute?.toInt()
-        secSelected = app?.second?.toInt()
-        etNote.setText(app?.note)
     }
 
     @SuppressLint("SimpleDateFormat")
@@ -199,8 +144,44 @@ class AddAppActivity : AppCompatActivity() {
         }
     }
 
+    private fun setAppInfoFromSelection(appName: String?, appPackageName: String?) {
+        rlGoToAppList.visibility = View.GONE
+        try {
+            appIcon = this.packageManager.getApplicationIcon(appPackageName.toString())
+            ivSelectedAppIcon.setImageDrawable(appIcon)
+        } catch (e: PackageManager.NameNotFoundException) {
+            e.printStackTrace()
+        }
+        tvAppName.text = appName
+        tvPackageName.text = appPackageName
+        ivScheduleIconStatus.setImageDrawable(
+            ResourcesCompat.getDrawable(
+                resources,
+                R.drawable.ic_baseline_alarm_on_24,
+                null
+            )
+        )
+        rlSelectApp.visibility = View.VISIBLE
+    }
+
+    @SuppressLint("SimpleDateFormat", "SetTextI18n")
+    private fun setAppInfoForEdit(app: AppSelectionModel?) {
+        setAppInfoFromSelection(app?.appName, app?.appPackageName)
+        tvTime.text = getTime(app?.dateTime)
+        tvDate.text = getDate(app?.dateTime)
+        val month = app?.month?.toInt()?.plus(1)
+        yearSelected = app?.year?.toInt()
+        monthSelected = month
+        daySelected = app?.day?.toInt()
+        hourSelected = app?.hour?.toInt()
+        minSelected = app?.minute?.toInt()
+        secSelected = app?.second?.toInt()
+        etNote.setText(app?.note)
+    }
+
     private fun checkIfSetInFuture() {
-        val inputDate = "$yearSelected-${monthSelected?.plus(1)}-$daySelected $hourSelected:$minSelected:$secSelected"
+        val inputDate =
+            "$yearSelected-${monthSelected?.plus(1)}-$daySelected $hourSelected:$minSelected:$secSelected"
         if (UtilClass.checkIfSetInFuture(this, inputDate)) {
             if (from.equals(Constants.edit)) {
                 updateApp()

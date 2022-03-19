@@ -48,6 +48,6 @@ class AppHistoryActivity : AppCompatActivity(), AppHistoryListAdapter.Deleted {
     }
 
     override fun deleted(isDeleted: Boolean) {
-        if(isDeleted) initView()
+        if (isDeleted) initView()
     }
 }

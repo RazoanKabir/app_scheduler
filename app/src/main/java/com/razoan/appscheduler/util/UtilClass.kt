@@ -26,7 +26,12 @@ class UtilClass {
             `in`.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
             context.startActivity(`in`)
         }
-        fun goToPreviousActivityWithBundle(context: Context, bundle: Bundle?, targetActivity: Class<out Activity?>?) {
+
+        fun goToPreviousActivityWithBundle(
+            context: Context,
+            bundle: Bundle?,
+            targetActivity: Class<out Activity?>?
+        ) {
             (context as Activity).finish()
             val intent = Intent(context, targetActivity)
             intent.flags = Intent.FLAG_ACTIVITY_CLEAR_TOP
@@ -64,11 +69,25 @@ class UtilClass {
             val getMyTime = sdf.format(date)
             var check = false
             if (getCurrentDateTime < getMyTime) {
-               check = true
+                check = true
             } else {
                 showToast(context, context.getString(R.string.pleaseSelectAFutureDateTime))
             }
             return check
+        }
+
+        fun getTime(s: String?): String {
+            val inputFormatTime: DateFormat = SimpleDateFormat("dd/MM/yyyy hh:mm:ss aa", Locale.US)
+            val time: Date = inputFormatTime.parse(s)
+            val setT = SimpleDateFormat("hh:mm:ss aa", Locale.US).format(time)
+            return setT
+        }
+
+        fun getDate(s: String?): String {
+            val inputFormat: DateFormat = SimpleDateFormat("dd/MM/yyyy hh:mm:ss aa", Locale.US)
+            val date: Date = inputFormat.parse(s)
+            val setD = SimpleDateFormat("dd/MM/yyyy", Locale.US).format(date)
+            return setD
         }
     }
 }

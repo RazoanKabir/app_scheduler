@@ -11,8 +11,7 @@ import com.razoan.appscheduler.R
 import com.razoan.appscheduler.handler.dbhandler.DatabaseHandler
 import com.razoan.appscheduler.model.AppSelectionModel
 
-class ViewDialog() {
-
+class ViewDialog {
     interface DeletedApp {
         fun appDeleted(isDeleted: Boolean)
     }
@@ -33,7 +32,7 @@ class ViewDialog() {
             dialog.dismiss()
         }
         mDialogOk?.setOnClickListener {
-            context?.let { it1 -> DatabaseHandler(it1).deleteSchedule(app?.id, context) }
+            context.let { it1 -> DatabaseHandler(it1).deleteSchedule(app?.id, context) }
             dialog.dismiss()
             deletedApp.appDeleted(true)
         }

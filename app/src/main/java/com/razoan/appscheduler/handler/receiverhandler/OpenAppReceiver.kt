@@ -51,7 +51,8 @@ class OpenAppReceiver : BroadcastReceiver() {
         val channelId = "AppScheduler"
         val description = "App scheduler open"
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-            notificationChannel = NotificationChannel(channelId, description, NotificationManager.IMPORTANCE_HIGH)
+            notificationChannel =
+                NotificationChannel(channelId, description, NotificationManager.IMPORTANCE_HIGH)
             notificationChannel.enableLights(true)
             notificationChannel.lightColor = Color.GREEN
             notificationChannel.enableVibration(true)

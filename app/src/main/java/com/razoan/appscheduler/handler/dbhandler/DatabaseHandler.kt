@@ -87,8 +87,8 @@ class DatabaseHandler(context: Context) {
     fun deleteAll(apps: ArrayList<AppSelectionModel>?): Int? {
         val db = openWritable()
         var success: Int? = -1
-        for(i in 0 until apps?.size!!) {
-          success = db?.delete(TABLE_SCHEDULER, "$KEY_ID=${apps[i].id}", null)
+        for (i in 0 until apps?.size!!) {
+            success = db?.delete(TABLE_SCHEDULER, "$KEY_ID=${apps[i].id}", null)
         }
         db?.close()
         return success
@@ -118,7 +118,7 @@ class DatabaseHandler(context: Context) {
     fun deleteAllHistory(apps: ArrayList<AppSelectionModel>?): Int? {
         val db = openWritable()
         var success: Int? = -1
-        for(i in 0 until apps?.size!!) {
+        for (i in 0 until apps?.size!!) {
             success = db?.delete(TABLE_SCHEDULER_HISTORY, "$KEY_ID=${apps[i].id}", null)
         }
         db?.close()
@@ -157,8 +157,6 @@ class DatabaseHandler(context: Context) {
             "SELECT  * FROM $TABLE_SCHEDULER WHERE $KEY_IS_EXECUTED = '0' ORDER BY $KEY_DATE_TIME ASC LIMIT 1"
         return getList(selectQuery)
     }
-
-
 
     @SuppressLint("Range")
     private fun getList(selectQuery: String): ArrayList<AppSelectionModel> {

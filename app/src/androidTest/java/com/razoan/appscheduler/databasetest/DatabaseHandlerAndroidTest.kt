@@ -123,10 +123,10 @@ class DatabaseHandlerAndroidTest {
             ), instrumentationCtx
         )
         apps = mDataSource?.getLatest()
-        assertThat(apps?.get(apps.size-1)?.dateTime).isEqualTo("19/03/2022 4:12:12 pm")
+        assertThat(apps?.get(apps.size - 1)?.dateTime).isEqualTo("19/03/2022 4:12:12 pm")
         mDataSource?.updateSchedule(
             AppSelectionModel(
-                apps?.get(apps.size-1)?.id,
+                apps?.get(apps.size - 1)?.id,
                 "YouTube",
                 "com.google.android.youtube",
                 "Testing add YouTube App for scheduling",
@@ -142,7 +142,7 @@ class DatabaseHandlerAndroidTest {
             ), instrumentationCtx
         )
         apps = mDataSource?.getLatest()
-        assertThat(apps?.get(apps.size-1)?.dateTime).isEqualTo("19/03/2022 4:10:22 pm")
+        assertThat(apps?.get(apps.size - 1)?.dateTime).isEqualTo("19/03/2022 4:10:22 pm")
     }
 
     @Test

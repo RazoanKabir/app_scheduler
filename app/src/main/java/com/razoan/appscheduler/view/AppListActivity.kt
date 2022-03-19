@@ -16,8 +16,8 @@ import kotlinx.android.synthetic.main.activity_app_list.*
 class AppListActivity : AppCompatActivity(), AppListAdapter.SelectedApp {
     private var appListAdapter: AppListAdapter? = null
     private var appListVm: AppListViewModel? = null
-    private var from : String? = ""
-    private var appId : String? = ""
+    private var from: String? = ""
+    private var appId: String? = ""
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_app_list)

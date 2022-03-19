@@ -27,21 +27,30 @@ class MainViewModel : ViewModel() {
 
     fun deleteAllHistory(context: Context) {
         val appListHistory = DatabaseHandler(context).viewScheduledAppHistory()
-        if(appListHistory.size==0) {
+        if (appListHistory.size == 0) {
             UtilClass.showToast(context, context.getString(R.string.noHistoryFound))
             return
         }
         val status = DatabaseHandler(context).deleteAllHistory(appListHistory)
         if (status != null) {
-            if(status > -1) UtilClass.showToast(context, context.getString(R.string.successfullyDeletedAllHistory))
+            if (status > -1) UtilClass.showToast(
+                context,
+                context.getString(R.string.successfullyDeletedAllHistory)
+            )
         }
     }
 
-    fun viewAppList(context: Context, rvAppList: RecyclerView, rlAppList: RelativeLayout ,rvEmptyView: RelativeLayout,
-                    deletedApp: ViewDialog.DeletedApp) {
+    fun viewAppList(
+        context: Context,
+        rvAppList: RecyclerView,
+        rlAppList: RelativeLayout,
+        rvEmptyView: RelativeLayout,
+        deletedApp: ViewDialog.DeletedApp
+    ) {
         val selectedAppList = getAppList(context)
-        if(selectedAppList.size > 0) {
-            rvAppList.layoutManager = LinearLayoutManager(context, LinearLayoutManager.VERTICAL, true)
+        if (selectedAppList.size > 0) {
+            rvAppList.layoutManager =
+                LinearLayoutManager(context, LinearLayoutManager.VERTICAL, true)
             rvAppList.setHasFixedSize(true)
             rvAppList.isNestedScrollingEnabled = false
             val scheduledAppListAdapter = ScheduledAppListAdapter(selectedAppList, deletedApp)

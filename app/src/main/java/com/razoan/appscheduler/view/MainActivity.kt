@@ -1,19 +1,11 @@
 package com.razoan.appscheduler.view
 
-import android.app.*
-import android.content.Context
-import android.content.Intent
-import android.graphics.BitmapFactory
-import android.graphics.Color
-import android.os.Build
 import android.os.Bundle
 import android.view.Menu
 import android.view.MenuItem
-import android.widget.RemoteViews
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.ViewModelProvider
 import com.razoan.appscheduler.R
-import com.razoan.appscheduler.model.AppSelectionModel
 import com.razoan.appscheduler.util.UtilClass
 import com.razoan.appscheduler.util.ViewDialog
 import com.razoan.appscheduler.viewmodel.MainViewModel
