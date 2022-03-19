@@ -19,12 +19,14 @@ class MainActivity : AppCompatActivity(), ViewDialog.DeletedApp {
         setContentView(R.layout.activity_main)
         initActionBar()
         initView()
+        checkBatteryOptimization()
         updateUI()
         initListener()
     }
 
-    private fun initView() {
-        mainVM = ViewModelProvider(this)[MainViewModel::class.java]
+    override fun onResume() {
+        super.onResume()
+        updateUI()
     }
 
     private fun initActionBar() {
@@ -33,15 +35,17 @@ class MainActivity : AppCompatActivity(), ViewDialog.DeletedApp {
         supportActionBar!!.setDisplayShowHomeEnabled(false)
     }
 
-    override fun onResume() {
-        super.onResume()
-        updateUI()
+    private fun initView() {
+        mainVM = ViewModelProvider(this)[MainViewModel::class.java]
+    }
+
+    private fun checkBatteryOptimization() {
+        mainVM?.checkBattery(this)
     }
 
     private fun updateUI() {
         mainVM?.viewAppList(this, rvAppList, rlAppList, rlEmptyView, this)
     }
-
 
     private fun initListener() {
         fabNewApp.setOnClickListener {
@@ -51,6 +55,15 @@ class MainActivity : AppCompatActivity(), ViewDialog.DeletedApp {
             updateUI()
             srDashboard.isRefreshing = false
         }
+    }
+
+    private fun deleteAllHistory() {
+        mainVM?.deleteAllHistory(this)
+    }
+
+    private fun deleteAllSchedules() {
+        mainVM?.deleteAll(this)
+        updateUI()
     }
 
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
@@ -75,15 +88,6 @@ class MainActivity : AppCompatActivity(), ViewDialog.DeletedApp {
             }
         }
         return true
-    }
-
-    private fun deleteAllHistory() {
-        mainVM?.deleteAllHistory(this)
-    }
-
-    private fun deleteAllSchedules() {
-        mainVM?.deleteAll(this)
-        updateUI()
     }
 
     override fun appDeleted(isDeleted: Boolean) {

@@ -1,5 +1,6 @@
 package com.razoan.appscheduler.viewmodel
 
+import android.annotation.SuppressLint
 import android.content.Context
 import android.view.View
 import android.widget.RelativeLayout
@@ -12,6 +13,21 @@ import com.razoan.appscheduler.handler.DatabaseHandler
 import com.razoan.appscheduler.model.AppSelectionModel
 import com.razoan.appscheduler.util.UtilClass
 import com.razoan.appscheduler.util.ViewDialog
+import androidx.core.content.ContextCompat.startActivity
+
+import android.content.Context.POWER_SERVICE
+
+import androidx.core.content.ContextCompat.getSystemService
+
+import android.os.PowerManager
+
+import android.content.Intent
+import android.net.Uri
+
+import android.os.Build
+import android.provider.Settings
+import androidx.core.content.ContextCompat
+
 
 class MainViewModel : ViewModel() {
     fun deleteAll(context: Context) {
@@ -49,5 +65,17 @@ class MainViewModel : ViewModel() {
 
     private fun getAppList(context: Context): ArrayList<AppSelectionModel> {
         return DatabaseHandler(context).viewScheduledApp()
+    }
+
+    @SuppressLint("BatteryLife")
+    fun checkBattery(context: Context) {
+        val intent = Intent()
+        val packageName: String = context.packageName
+        val pm = context.getSystemService(POWER_SERVICE) as PowerManager?
+        if (!pm!!.isIgnoringBatteryOptimizations(packageName)) {
+            intent.action = Settings.ACTION_REQUEST_IGNORE_BATTERY_OPTIMIZATIONS
+            intent.data = Uri.parse("package:$packageName")
+            context.startActivity(intent)
+        }
     }
 }
