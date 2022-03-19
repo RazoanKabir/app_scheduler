@@ -1,6 +1,7 @@
 package com.razoan.appscheduler.databasetest
 
 import android.content.Context
+import android.provider.Settings
 import androidx.arch.core.executor.testing.InstantTaskExecutorRule
 import androidx.test.core.app.ApplicationProvider
 import androidx.test.ext.junit.runners.AndroidJUnit4
@@ -33,6 +34,7 @@ class DatabaseHandlerAndroidTest {
 
     @Test
     fun testPreConditionsAndroid() {
+        assertThat(Settings.canDrawOverlays(instrumentationCtx))
         assertThat(mDataSource).isNotEqualTo(null)
     }
 
