@@ -206,5 +206,28 @@ class DatabaseHandlerAndroidTest {
         val apps = mDataSource?.viewScheduledApp()
         assertThat(apps?.get(apps.size - 1)?.appName).isEqualTo("YouTube")
     }
+
+    @Test
+    fun testAddHistory() {
+        val appsHistorySizeStart = mDataSource?.viewScheduledAppHistory()
+        mDataSource?.addAppHistory(
+            AppSelectionModel(
+                0,
+                "YouTube",
+                "com.google.android.youtube",
+                "Testing Update YouTube App",
+                "19/03/2022 4:20 pm",
+                "2022",
+                "3",
+                "19",
+                "16",
+                "20",
+                "0",
+                "0"
+            )
+        )
+        val appsHistorySize = mDataSource?.viewScheduledAppHistory()
+        assertThat(appsHistorySizeStart?.size!! < appsHistorySize?.size!!)
+    }
 }
 
