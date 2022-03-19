@@ -16,13 +16,31 @@ import kotlinx.android.synthetic.main.activity_app_list.*
 class AppListActivity : AppCompatActivity(), AppListAdapter.SelectedApp {
     private var appListAdapter: AppListAdapter? = null
     private var appListVm: AppListViewModel? = null
+    private var from : String? = ""
+    private var appId : String? = ""
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_app_list)
-        appListVm = ViewModelProvider(this)[AppListViewModel::class.java]
-        appListVm?.execute(this)
+        getIntentData()
+        initView()
         setObserver()
         initListener()
+    }
+
+    private fun initView() {
+        appListVm = ViewModelProvider(this)[AppListViewModel::class.java]
+        appListVm?.execute(this)
+    }
+
+    private fun getIntentData() {
+        if (intent != null) {
+            if (intent.getStringExtra(Constants.from) != null) {
+                from = intent.getStringExtra(Constants.from)
+            }
+            if (intent.getStringExtra(Constants.appId) != null) {
+                appId = intent.getStringExtra(Constants.appId)
+            }
+        }
     }
 
     private fun initListener() {
@@ -51,6 +69,9 @@ class AppListActivity : AppCompatActivity(), AppListAdapter.SelectedApp {
         val bundle = Bundle()
         bundle.putString(Constants.appName, selectedApp.appName)
         bundle.putString(Constants.appPackageName, selectedApp.packageName)
+        bundle.putString(Constants.appPackageName, selectedApp.packageName)
+        bundle.putString(Constants.from, from)
+        bundle.putString(Constants.appId, appId)
         UtilClass.goToPreviousActivityWithBundle(this, bundle, AddAppActivity::class.java)
     }
 }

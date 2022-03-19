@@ -1,4 +1,4 @@
-package com.razoan.appscheduler.handler
+package com.razoan.appscheduler.handler.dbhandler
 
 import android.content.Context
 import android.database.sqlite.SQLiteDatabase
@@ -20,6 +20,7 @@ class DataBaseBaseClass(context: Context?) : SQLiteOpenHelper(context, DATABASE_
         var KEY_DAY = "day"
         var KEY_HOUR = "hour"
         var KEY_MINUTE = "minute"
+        var KEY_SECOND = "second"
         var KEY_IS_REPEATABLE = "is_repeatable"
         var KEY_IS_EXECUTED = "is_executed"
     }
@@ -36,6 +37,7 @@ class DataBaseBaseClass(context: Context?) : SQLiteOpenHelper(context, DATABASE_
                 + KEY_DAY + " TEXT,"
                 + KEY_HOUR + " TEXT,"
                 + KEY_MINUTE + " TEXT,"
+                + KEY_SECOND + " TEXT,"
                 + KEY_IS_REPEATABLE + " TEXT,"
                 + KEY_IS_EXECUTED + " TEXT"
                 + ")")
@@ -52,6 +54,7 @@ class DataBaseBaseClass(context: Context?) : SQLiteOpenHelper(context, DATABASE_
                 + KEY_DAY + " TEXT,"
                 + KEY_HOUR + " TEXT,"
                 + KEY_MINUTE + " TEXT,"
+                + KEY_SECOND + " TEXT,"
                 + KEY_IS_REPEATABLE + " TEXT,"
                 + KEY_IS_EXECUTED + " TEXT"
                 + ")")

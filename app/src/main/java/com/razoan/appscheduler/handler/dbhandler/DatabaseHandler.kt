@@ -1,4 +1,4 @@
-package com.razoan.appscheduler.handler
+package com.razoan.appscheduler.handler.dbhandler
 
 import android.annotation.SuppressLint
 import android.app.AlarmManager
@@ -10,23 +10,24 @@ import android.database.Cursor
 import android.database.SQLException
 import android.database.sqlite.SQLiteDatabase
 import android.database.sqlite.SQLiteException
-import com.razoan.appscheduler.handler.DataBaseBaseClass.Companion.KEY_DATE_TIME
-import com.razoan.appscheduler.handler.DataBaseBaseClass.Companion.KEY_DAY
-import com.razoan.appscheduler.handler.DataBaseBaseClass.Companion.KEY_HOUR
-import com.razoan.appscheduler.handler.DataBaseBaseClass.Companion.KEY_ID
-import com.razoan.appscheduler.handler.DataBaseBaseClass.Companion.KEY_IS_EXECUTED
-import com.razoan.appscheduler.handler.DataBaseBaseClass.Companion.KEY_IS_REPEATABLE
-import com.razoan.appscheduler.handler.DataBaseBaseClass.Companion.KEY_MINUTE
-import com.razoan.appscheduler.handler.DataBaseBaseClass.Companion.KEY_MONTH
-import com.razoan.appscheduler.handler.DataBaseBaseClass.Companion.KEY_NAME
-import com.razoan.appscheduler.handler.DataBaseBaseClass.Companion.KEY_NOTE
-import com.razoan.appscheduler.handler.DataBaseBaseClass.Companion.KEY_PACKAGE_NAME
-import com.razoan.appscheduler.handler.DataBaseBaseClass.Companion.KEY_YEAR
-import com.razoan.appscheduler.handler.DataBaseBaseClass.Companion.TABLE_SCHEDULER
-import com.razoan.appscheduler.handler.DataBaseBaseClass.Companion.TABLE_SCHEDULER_HISTORY
+import com.razoan.appscheduler.handler.dbhandler.DataBaseBaseClass.Companion.KEY_DATE_TIME
+import com.razoan.appscheduler.handler.dbhandler.DataBaseBaseClass.Companion.KEY_DAY
+import com.razoan.appscheduler.handler.dbhandler.DataBaseBaseClass.Companion.KEY_HOUR
+import com.razoan.appscheduler.handler.dbhandler.DataBaseBaseClass.Companion.KEY_ID
+import com.razoan.appscheduler.handler.dbhandler.DataBaseBaseClass.Companion.KEY_IS_EXECUTED
+import com.razoan.appscheduler.handler.dbhandler.DataBaseBaseClass.Companion.KEY_IS_REPEATABLE
+import com.razoan.appscheduler.handler.dbhandler.DataBaseBaseClass.Companion.KEY_MINUTE
+import com.razoan.appscheduler.handler.dbhandler.DataBaseBaseClass.Companion.KEY_MONTH
+import com.razoan.appscheduler.handler.dbhandler.DataBaseBaseClass.Companion.KEY_NAME
+import com.razoan.appscheduler.handler.dbhandler.DataBaseBaseClass.Companion.KEY_NOTE
+import com.razoan.appscheduler.handler.dbhandler.DataBaseBaseClass.Companion.KEY_PACKAGE_NAME
+import com.razoan.appscheduler.handler.dbhandler.DataBaseBaseClass.Companion.KEY_SECOND
+import com.razoan.appscheduler.handler.dbhandler.DataBaseBaseClass.Companion.KEY_YEAR
+import com.razoan.appscheduler.handler.dbhandler.DataBaseBaseClass.Companion.TABLE_SCHEDULER
+import com.razoan.appscheduler.handler.dbhandler.DataBaseBaseClass.Companion.TABLE_SCHEDULER_HISTORY
 import com.razoan.appscheduler.model.AppSelectionModel
 import com.razoan.appscheduler.util.Constants
-import com.razoan.appscheduler.util.OpenAppReceiver
+import com.razoan.appscheduler.handler.receiverhandler.OpenAppReceiver
 import kotlinx.serialization.json.Json
 import java.util.*
 import kotlin.collections.ArrayList
@@ -52,11 +53,12 @@ class DatabaseHandler(context: Context) {
         mDbHelper?.close()
     }
 
-    fun addApp(app: AppSelectionModel): Long? {
+    fun addApp(app: AppSelectionModel, context: Context): Long? {
         val db = openWritable()
         val contentValues = getContentValues(app)
         val success = db?.insert(TABLE_SCHEDULER, null, contentValues)
         db?.close()
+        setLatestScheduledApp(context)
         return success
     }
 
@@ -65,18 +67,20 @@ class DatabaseHandler(context: Context) {
         return getList(selectQuery)
     }
 
-    fun updateSchedule(app: AppSelectionModel): Int? {
+    fun updateSchedule(app: AppSelectionModel, context: Context): Int? {
         val db = openWritable()
         val contentValues = getContentValues(app)
         val success = db?.update(TABLE_SCHEDULER, contentValues, KEY_ID + "=" + app.id, null)
         db?.close()
+        setLatestScheduledApp(context)
         return success
     }
 
-    fun deleteSchedule(id: Int?): Int? {
+    fun deleteSchedule(id: Int?, context: Context): Int? {
         val db = openWritable()
         val success = db?.delete(TABLE_SCHEDULER, "$KEY_ID=$id", null)
         db?.close()
+        setLatestScheduledApp(context)
         return success
     }
 
@@ -122,9 +126,7 @@ class DatabaseHandler(context: Context) {
     }
 
     fun setLatestScheduledApp(context: Context) {
-        val selectQuery =
-            "SELECT  * FROM $TABLE_SCHEDULER WHERE $KEY_IS_EXECUTED = '0' ORDER BY $KEY_DATE_TIME ASC LIMIT 1"
-        val latestAppToOpen = getList(selectQuery)
+        val latestAppToOpen = getLatest()
         if (latestAppToOpen.size > 0) {
             val appToJson = Json.encodeToString(AppSelectionModel.serializer(), latestAppToOpen[0])
             val alarmMgr = context.getSystemService(Context.ALARM_SERVICE) as AlarmManager
@@ -150,6 +152,14 @@ class DatabaseHandler(context: Context) {
         }
     }
 
+    fun getLatest(): ArrayList<AppSelectionModel> {
+        val selectQuery =
+            "SELECT  * FROM $TABLE_SCHEDULER WHERE $KEY_IS_EXECUTED = '0' ORDER BY $KEY_DATE_TIME ASC LIMIT 1"
+        return getList(selectQuery)
+    }
+
+
+
     @SuppressLint("Range")
     private fun getList(selectQuery: String): ArrayList<AppSelectionModel> {
         val app = ArrayList<AppSelectionModel>()
@@ -172,6 +182,7 @@ class DatabaseHandler(context: Context) {
         var day: String
         var hour: String
         var minute: String
+        var second: String
         var isRepeatable: String
         var isExecuted: String
 
@@ -187,6 +198,7 @@ class DatabaseHandler(context: Context) {
                 day = cursor.getString(cursor.getColumnIndex(KEY_DAY))
                 hour = cursor.getString(cursor.getColumnIndex(KEY_HOUR))
                 minute = cursor.getString(cursor.getColumnIndex(KEY_MINUTE))
+                second = cursor.getString(cursor.getColumnIndex(KEY_SECOND))
                 isRepeatable = cursor.getString(cursor.getColumnIndex(KEY_IS_REPEATABLE))
                 isExecuted = cursor.getString(cursor.getColumnIndex(KEY_IS_EXECUTED))
 
@@ -201,6 +213,7 @@ class DatabaseHandler(context: Context) {
                     day = day,
                     hour = hour,
                     minute = minute,
+                    second = second,
                     isRepeatable = isRepeatable,
                     isExecuted = isExecuted
                 )
@@ -224,6 +237,7 @@ class DatabaseHandler(context: Context) {
         contentValues.put(KEY_DAY, app.day)
         contentValues.put(KEY_HOUR, app.hour)
         contentValues.put(KEY_MINUTE, app.minute)
+        contentValues.put(KEY_SECOND, app.second)
         contentValues.put(KEY_IS_REPEATABLE, app.isRepeatable)
         contentValues.put(KEY_IS_EXECUTED, app.isExecuted)
         return contentValues

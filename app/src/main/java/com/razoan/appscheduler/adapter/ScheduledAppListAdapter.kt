@@ -54,12 +54,13 @@ class ScheduledAppListAdapter(
             val appToJson = Json.encodeToString(AppSelectionModel.serializer(), apps[position])
             val intent = Intent(context, AddAppActivity::class.java)
             intent.putExtra(Constants.appToJSON, appToJson)
+            intent.putExtra(Constants.from, Constants.edit)
             context.startActivity(intent)
         }
 
         holder.ivDelete?.setOnClickListener {
-            val alert = ViewDialog(context)
-            alert.showDeleteDialog(apps[position], deletedApp)
+            val alert = ViewDialog()
+            alert.showDeleteDialog(context, apps[position], deletedApp)
         }
     }
 

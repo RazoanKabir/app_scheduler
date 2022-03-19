@@ -6,7 +6,7 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.razoan.appscheduler.R
 import com.razoan.appscheduler.adapter.AppHistoryListAdapter
-import com.razoan.appscheduler.handler.DatabaseHandler
+import com.razoan.appscheduler.handler.dbhandler.DatabaseHandler
 import com.razoan.appscheduler.model.AppSelectionModel
 import kotlinx.android.synthetic.main.activity_app_history.*
 
@@ -35,7 +35,7 @@ class AppHistoryActivity : AppCompatActivity(), AppHistoryListAdapter.Deleted {
             DatabaseHandler(this).viewScheduledAppHistory()
         if (selectedAppList.size > 0) {
             rvAppHistoryList?.layoutManager =
-                LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false)
+                LinearLayoutManager(this, LinearLayoutManager.VERTICAL, true)
             rvAppHistoryList?.setHasFixedSize(true)
             rvAppHistoryList?.isNestedScrollingEnabled = false
             appHistoryListAdapter = AppHistoryListAdapter(selectedAppList, this)

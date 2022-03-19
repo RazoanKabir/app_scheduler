@@ -8,16 +8,16 @@ import android.view.Window
 import android.widget.FrameLayout
 import android.widget.TextView
 import com.razoan.appscheduler.R
-import com.razoan.appscheduler.handler.DatabaseHandler
+import com.razoan.appscheduler.handler.dbhandler.DatabaseHandler
 import com.razoan.appscheduler.model.AppSelectionModel
 
-class ViewDialog(private var context: Context?) {
+class ViewDialog() {
 
     interface DeletedApp {
         fun appDeleted(isDeleted: Boolean)
     }
 
-    fun showDeleteDialog(app: AppSelectionModel?, deletedApp: DeletedApp) {
+    fun showDeleteDialog(context: Context?,app: AppSelectionModel?, deletedApp: DeletedApp) {
         val dialog = context?.let { Dialog(it) }
         dialog?.requestWindowFeature(Window.FEATURE_NO_TITLE)
         dialog?.setCancelable(false)
@@ -33,7 +33,7 @@ class ViewDialog(private var context: Context?) {
             dialog.dismiss()
         }
         mDialogOk?.setOnClickListener {
-            context?.let { it1 -> DatabaseHandler(it1).deleteSchedule(app?.id) }
+            context?.let { it1 -> DatabaseHandler(it1).deleteSchedule(app?.id, context) }
             dialog.dismiss()
             deletedApp.appDeleted(true)
         }

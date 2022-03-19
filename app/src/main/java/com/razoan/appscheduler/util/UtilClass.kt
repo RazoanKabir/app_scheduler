@@ -1,10 +1,15 @@
 package com.razoan.appscheduler.util
 
+import android.annotation.SuppressLint
 import android.app.Activity
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import android.widget.Toast
+import com.razoan.appscheduler.R
+import java.text.DateFormat
+import java.text.SimpleDateFormat
+import java.util.*
 
 class UtilClass {
     companion object {
@@ -29,8 +34,41 @@ class UtilClass {
             context.startActivity(intent)
         }
 
+        fun goToNextActivityWithBundleWithoutClearing(
+            context: Context,
+            bundle: Bundle?,
+            targetActivity: Class<out Activity?>?
+        ) {
+            val `in` = Intent(context, targetActivity)
+            `in`.putExtras(bundle!!)
+            context.startActivity(`in`)
+        }
+
         fun showToast(context: Context?, msg: String?) {
             Toast.makeText(context, msg, Toast.LENGTH_LONG).show()
+        }
+
+        fun getRandom(): Int {
+            val min = 1
+            val max = 1000
+            return Random().nextInt(max - min + 1) + min
+        }
+
+        @SuppressLint("SimpleDateFormat")
+        fun checkIfSetInFuture(context: Context, old: String): Boolean {
+            val c = Calendar.getInstance()
+            val sdf = SimpleDateFormat("yyyy-MM-dd HH:mm:ss")
+            val getCurrentDateTime = sdf.format(c.time)
+            val inputFormat: DateFormat = SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.US)
+            val date: Date = inputFormat.parse(old)
+            val getMyTime = sdf.format(date)
+            var check = false
+            if (getCurrentDateTime < getMyTime) {
+               check = true
+            } else {
+                showToast(context, context.getString(R.string.pleaseSelectAFutureDateTime))
+            }
+            return check
         }
     }
 }

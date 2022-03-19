@@ -14,7 +14,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.razoan.appscheduler.R
 import com.razoan.appscheduler.adapter.ScheduledAppListAdapter
-import com.razoan.appscheduler.handler.DatabaseHandler
+import com.razoan.appscheduler.handler.dbhandler.DatabaseHandler
 import com.razoan.appscheduler.model.AppSelectionModel
 import com.razoan.appscheduler.util.UtilClass
 import com.razoan.appscheduler.util.ViewDialog
@@ -41,7 +41,7 @@ class MainViewModel : ViewModel() {
                     deletedApp: ViewDialog.DeletedApp) {
         val selectedAppList = getAppList(context)
         if(selectedAppList.size > 0) {
-            rvAppList.layoutManager = LinearLayoutManager(context, LinearLayoutManager.VERTICAL, false)
+            rvAppList.layoutManager = LinearLayoutManager(context, LinearLayoutManager.VERTICAL, true)
             rvAppList.setHasFixedSize(true)
             rvAppList.isNestedScrollingEnabled = false
             val scheduledAppListAdapter = ScheduledAppListAdapter(selectedAppList, deletedApp)

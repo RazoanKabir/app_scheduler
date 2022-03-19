@@ -10,7 +10,7 @@ import android.widget.LinearLayout
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.razoan.appscheduler.R
-import com.razoan.appscheduler.handler.DatabaseHandler
+import com.razoan.appscheduler.handler.dbhandler.DatabaseHandler
 import com.razoan.appscheduler.model.AppSelectionModel
 
 class AppHistoryListAdapter(var apps: ArrayList<AppSelectionModel>, private var isDeleted: Deleted) : RecyclerView.Adapter<AppHistoryListAdapter.ParentViewHolder>() {

@@ -11,13 +11,14 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.res.ResourcesCompat
 import com.google.gson.Gson
 import com.razoan.appscheduler.R
-import com.razoan.appscheduler.handler.DatabaseHandler
+import com.razoan.appscheduler.handler.dbhandler.DatabaseHandler
 import com.razoan.appscheduler.model.AppSelectionModel
 import com.razoan.appscheduler.util.Constants
 import com.razoan.appscheduler.util.UtilClass
 import kotlinx.android.synthetic.main.activity_add_app.*
 import java.text.SimpleDateFormat
 import java.util.*
+import java.text.DateFormat
 
 class AddAppActivity : AppCompatActivity() {
     private var appName: String? = null
@@ -25,11 +26,14 @@ class AddAppActivity : AppCompatActivity() {
     private var appIcon: Drawable? = null
     private var cal = Calendar.getInstance()
     private var minSelected: Int? = 0
+    private var secSelected: Int? = 30
     private var hourSelected: Int? = 0
     private var daySelected: Int? = 0
     private var monthSelected: Int? = 0
     private var yearSelected: Int? = 0
     private var app: AppSelectionModel? = null
+    private var from: String? = Constants.from
+    private var appId: String? = ""
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_add_app)
@@ -42,12 +46,13 @@ class AddAppActivity : AppCompatActivity() {
     private fun setDateValues() {
         val df = SimpleDateFormat("dd/MM/yyyy", Locale.getDefault())
         tvDate.text = df.format(cal.time)
-        tvTime.text = SimpleDateFormat("hh:mm aa").format(cal.time)
+        tvTime.text = SimpleDateFormat("hh:mm:ss aa").format(cal.time)
         yearSelected = cal.get(Calendar.YEAR)
         monthSelected = cal.get(Calendar.MONTH)
         daySelected = cal.get(Calendar.DAY_OF_MONTH)
         hourSelected = cal.get(Calendar.HOUR_OF_DAY)
         minSelected = cal.get(Calendar.MINUTE)
+        secSelected = cal.get(Calendar.SECOND)
     }
 
     private fun checkIntent() {
@@ -62,8 +67,16 @@ class AddAppActivity : AppCompatActivity() {
                     intent?.getStringExtra(Constants.appToJSON),
                     AppSelectionModel::class.java
                 )
+                appId = app?.id.toString()
                 setAppInfoForEdit(app)
             }
+            if (intent.getStringExtra(Constants.appId) != null) {
+                appId = intent.getStringExtra(Constants.appId)
+            }
+            if (intent.getStringExtra(Constants.from) != null && intent.getStringExtra(Constants.from)
+                    .equals(Constants.edit)
+            )
+                from = intent.getStringExtra(Constants.from)
         }
     }
 
@@ -90,17 +103,37 @@ class AddAppActivity : AppCompatActivity() {
     @SuppressLint("SimpleDateFormat", "SetTextI18n")
     private fun setAppInfoForEdit(app: AppSelectionModel?) {
         setAppInfoFromSelection(app?.appName, app?.appPackageName)
-        val aa = if (app?.hour?.toInt()!! > 11) ("pm") else ("am")
-        val hour = if (app.hour.toInt() > 12) (app.hour.toInt() - 12) else (app.hour)
-        etNote.setText(app.note)
-        tvDate.text = "${app.day}/${app.month}/${app.year}"
-        tvTime.text = "${hour}:${app.minute} $aa"
 
-        yearSelected = app.year?.toInt()
-        monthSelected = app.month?.toInt()
-        daySelected = app.day?.toInt()
-        hourSelected = app.hour.toInt()
-        minSelected = app.minute?.toInt()
+        val inputFormat: DateFormat = SimpleDateFormat("dd/MM/yyyy hh:mm:ss aa", Locale.US)
+        val date: Date = inputFormat.parse(app?.dateTime)
+        val setD = SimpleDateFormat("dd/MM/yyyy", Locale.US).format(date)
+
+        val inputFormatTime: DateFormat = SimpleDateFormat("dd/MM/yyyy hh:mm:ss aa", Locale.US)
+        val time: Date = inputFormatTime.parse(app?.dateTime)
+        val setT = SimpleDateFormat("hh:mm:ss aa", Locale.US).format(time)
+
+        tvTime.text = setT
+        tvDate.text = setD
+        /*val aa = if (app?.hour?.toInt()!! > 11) ("pm") else ("am")
+        val hour = if (app.hour.toInt() > 12)
+            (app.hour.toInt() - 12)
+        else if (app.hour.toInt() == 0)
+            (app.hour.toInt() + 12)
+        else
+            (app.hour)
+        val min = if (app.minute?.toInt()!! < 10) "0${app.minute}" else app.minute
+
+        val month = app.month?.toInt()?.plus(1)
+        tvDate.text = "${app.day}/${month}/${app.year}"
+        tvTime.text = "${hour}:${min} $aa"*/
+        val month = app?.month?.toInt()?.plus(1)
+        yearSelected = app?.year?.toInt()
+        monthSelected = month
+        daySelected = app?.day?.toInt()
+        hourSelected = app?.hour?.toInt()
+        minSelected = app?.minute?.toInt()
+        secSelected = app?.second?.toInt()
+        etNote.setText(app?.note)
     }
 
     @SuppressLint("SimpleDateFormat")
@@ -149,22 +182,38 @@ class AddAppActivity : AppCompatActivity() {
         }
 
         rlGoToAppList.setOnClickListener {
-            UtilClass.goToNextActivity(this, AppListActivity::class.java)
+            goToAppList()
         }
 
         rlSelectApp.setOnClickListener {
-            UtilClass.goToNextActivity(this, AppListActivity::class.java)
+            goToAppList()
         }
 
         btnScheduleApp.setOnClickListener {
-            if (app != null) {
-                updateApp()
-            } else addApp()
+            checkIfSetInFuture()
+
         }
 
         ivBack.setOnClickListener {
             onBackPressed()
         }
+    }
+
+    private fun checkIfSetInFuture() {
+        val inputDate = "$yearSelected-${monthSelected?.plus(1)}-$daySelected $hourSelected:$minSelected:$secSelected"
+        if (UtilClass.checkIfSetInFuture(this, inputDate)) {
+            if (from.equals(Constants.edit)) {
+                updateApp()
+            } else
+                addApp()
+        }
+    }
+
+    private fun goToAppList() {
+        val b = Bundle()
+        b.putString(Constants.from, from)
+        b.putString(Constants.appId, app?.id.toString())
+        UtilClass.goToNextActivityWithBundleWithoutClearing(this, b, AppListActivity::class.java)
     }
 
     private fun updateApp() {
@@ -173,20 +222,7 @@ class AddAppActivity : AppCompatActivity() {
             return
         }
         val status = DatabaseHandler(this).updateSchedule(
-            AppSelectionModel(
-                app?.id,
-                tvAppName.text.toString(),
-                tvPackageName.text.toString(),
-                etNote.text.toString(),
-                "${tvDate.text} ${tvTime.text}",
-                yearSelected.toString(),
-                monthSelected.toString(),
-                daySelected.toString(),
-                hourSelected.toString(),
-                minSelected.toString(),
-                "0",
-                "0"
-            )
+            generateModel(appId?.toInt()), this
         )
         if (status != null) {
             updateStatus(status)
@@ -199,24 +235,29 @@ class AddAppActivity : AppCompatActivity() {
             return
         }
         val status = DatabaseHandler(this).addApp(
-            AppSelectionModel(
-                0,
-                tvAppName.text.toString(),
-                tvPackageName.text.toString(),
-                etNote.text.toString(),
-                "${tvDate.text} ${tvTime.text}",
-                yearSelected.toString(),
-                monthSelected.toString(),
-                daySelected.toString(),
-                hourSelected.toString(),
-                minSelected.toString(),
-                "0",
-                "0"
-            )
+            generateModel(0), this
         )
         if (status != null) {
             updateStatus(status)
         }
+    }
+
+    private fun generateModel(id: Int?): AppSelectionModel {
+        return AppSelectionModel(
+            id,
+            tvAppName.text.toString(),
+            tvPackageName.text.toString(),
+            etNote.text.toString(),
+            "${tvDate.text} ${tvTime.text}",
+            yearSelected.toString(),
+            monthSelected.toString(),
+            daySelected.toString(),
+            hourSelected.toString(),
+            minSelected.toString(),
+            secSelected.toString(),
+            "0",
+            "0"
+        )
     }
 
     private fun updateStatus(status: Long) {

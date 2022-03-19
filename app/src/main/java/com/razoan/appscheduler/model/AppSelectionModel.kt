@@ -14,6 +14,7 @@ data class AppSelectionModel(
     val day: String?,
     val hour: String?,
     val minute: String?,
+    val second: String?,
     val isRepeatable: String?,
     val isExecuted: String?
 )

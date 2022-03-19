@@ -6,6 +6,8 @@
     <uses-permission android:name="android.permission.SYSTEM_ALERT_WINDOW"/>
     <permission android:name="android.permission.QUERY_ALL_PACKAGES" />
     <uses-permission  android:name="android.permission.REQUEST_IGNORE_BATTERY_OPTIMIZATIONS"/>
+    <uses-permission android:name="android.permission.WAKE_LOCK" />
+    <uses-permission android:name="android.permission.DISABLE_KEYGUARD" />
     <uses-permission
         android:name="android.permission.PACKAGE_USAGE_STATS"
         tools:ignore="ProtectedPermissions" />
@@ -42,7 +44,7 @@
             android:screenOrientation="fullSensor"
             android:windowSoftInputMode="stateAlwaysHidden"/>
 
-        <receiver android:enabled="true" android:name=".util.OpenAppReceiver"
+        <receiver android:enabled="true" android:name=".handler.receiverhandler.OpenAppReceiver"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.ACTION_AIRPLANE_MODE_CHANGED"/>

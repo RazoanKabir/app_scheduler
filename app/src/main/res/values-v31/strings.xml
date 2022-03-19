@@ -32,4 +32,5 @@
     <string name="successfullyDeletedAllHistory">Successfully deleted all apps history.</string>
     <string name="noHistoryFound">No History found.</string>
     <string name="emptyListHistory">No app history found. App history will be automatically added after successful execution.</string>
+    <string name="pleaseSelectAFutureDateTime">Please select a future date-time.</string>
 </resources>
