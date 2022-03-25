@@ -125,6 +125,7 @@ class DatabaseHandler(context: Context) {
         return success
     }
 
+    @SuppressLint("UnspecifiedImmutableFlag")
     fun setLatestScheduledApp(context: Context) {
         val latestAppToOpen = getLatest()
         if (latestAppToOpen.size > 0) {
